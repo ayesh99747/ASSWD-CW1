@@ -34,6 +34,17 @@ class Users extends CI_Model
 		}
 	}
 
+	function isUsernameUnique($username)
+	{
+		$this->db->where('username', $username);
+		$result = $this->db->get('users');
+		if ($result->num_rows() > 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	function authenticateUser($username, $password)
 	{
 		$result = $this->db->get_where('users', array('username' => $username));

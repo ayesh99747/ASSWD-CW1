@@ -21,7 +21,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 <?php endif; ?>
 
-<?php echo form_open('Authentication/registrationConfirmation', $attributes); ?>
+<?php if ($this->session->userdata('is_logged_in') == true): ?>
+	<div class="alert alert-danger print-error-msg">
+		<?php echo "You have already logged in!"; ?>
+	</div>
+<?php endif; ?>
+
+<?php echo form_open_multipart('Authentication/registrationConfirmation', $attributes); ?>
 
 
 <!-- Firstname Input -->
@@ -120,7 +126,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	echo form_label('Image Upload');
 	$data = array(
 			'class' => 'form-control',
-			'name' => 'image',
+			'name' => 'imageUpload',
 			'placeholder' => 'Avatar Image',
 
 	);
