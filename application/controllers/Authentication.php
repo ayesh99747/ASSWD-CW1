@@ -138,7 +138,7 @@ class Authentication extends CI_Controller
 				$this->session->is_logged_in = true;
 				$this->session->username = $username;
 				log_message('debug', "Login Success - " . $username);
-				redirect('Home/index');
+				redirect('User/viewPrivateHomePage/'.$username);
 			} else {
 				log_message('debug', "Login Fail - " . $username);
 				$this->session->login_error = True;
@@ -150,8 +150,11 @@ class Authentication extends CI_Controller
 
 	public function logout()
 	{
-		$this->session->is_logged_in = False;
-		$this->session->username = '';
+		$array_items = array('is_logged_in' => '', 'username' => '');
+		$this->session->unset_userdata($array_items);
+		$this->session->sess_destroy();
+//		$this->session->is_logged_in = False;
+//		$this->session->username = '';
 		redirect('Home/index');
 	}
 }

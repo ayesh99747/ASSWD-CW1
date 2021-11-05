@@ -12,6 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 <?php endif; ?>
 
-<p class="h2">Welcome <?php echo $name ?> ! You can now proceed to the home page.</p><br>
+<p class="h3">Welcome <?php echo $name ?> ! You can now proceed to the <a
+			href="<?php echo base_url() ?>index.php/User/viewPrivateHomePage/">home page.</a></p><br>
 
 

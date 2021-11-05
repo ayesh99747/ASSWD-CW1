@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Users extends CI_Model
 {
 
-	function createNewUser($username, $firstname, $lastName, $emailAddress, $password)
+	public function createNewUser($username, $firstname, $lastName, $emailAddress, $password)
 	{
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		$dataArray = array(
@@ -22,7 +22,7 @@ class Users extends CI_Model
 		}
 	}
 
-	function getNameByUsername($username)
+	public function getNameByUsername($username)
 	{
 		$this->db->where('username', $username);
 		$result = $this->db->get('users');
@@ -34,7 +34,7 @@ class Users extends CI_Model
 		}
 	}
 
-	function isUsernameUnique($username)
+	public function isUsernameUnique($username)
 	{
 		$this->db->where('username', $username);
 		$result = $this->db->get('users');
@@ -45,7 +45,7 @@ class Users extends CI_Model
 		}
 	}
 
-	function authenticateUser($username, $password)
+	public function authenticateUser($username, $password)
 	{
 		$result = $this->db->get_where('users', array('username' => $username));
 		if ($result->num_rows() != 1) {
@@ -60,7 +60,7 @@ class Users extends CI_Model
 		}
 	}
 
-	function is_logged_in()
+	public function is_logged_in()
 	{
 		if (isset($this->session->is_logged_in) && $this->session->is_logged_in == True) {
 			return True;

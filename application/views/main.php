@@ -20,8 +20,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<?php if ($this->session->userdata('is_logged_in') == true): ?>
 			<div class="col-md-8">
 				<div class="d-flex justify-content-start">
-					<a href="<?php echo base_url() ?>index.php/Home">
-						<img src="\cw1\assets\logos\TREBLE - Black Logo.png" alt="Treble Logo" width="100" height="100">
+					<a href="<?php echo base_url() ?>index.php/User/viewPrivateHomePage/<?php echo $this->session->username ?>">
+						<img src="\cw1\assets\logos\TREBLE.svg" alt="Treble Logo" width="100" height="100">
 					</a>
 				</div>
 			</div>
@@ -35,7 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<div class="col-md-8">
 				<div class="d-flex justify-content-start">
 					<a href="<?php echo base_url() ?>index.php/Home">
-						<img src="\cw1\assets\logos\TREBLE - Black Logo.png" alt="Treble Logo" width="100" height="100">
+						<img src="\cw1\assets\logos\TREBLE.svg" alt="Treble Logo" width="100" height="100">
 					</a>
 				</div>
 			</div>

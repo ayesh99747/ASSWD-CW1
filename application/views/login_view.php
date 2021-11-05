@@ -7,6 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <p class="h1">Login Form</p><br>
 
 <?php $attributes = array('id' => 'login_form', 'class' => 'row g-3') ?>
+
 <?php if ($this->session->flashdata('loginErrors')): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('loginErrors'); ?>
