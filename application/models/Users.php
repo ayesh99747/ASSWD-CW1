@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Users extends CI_Model
 {
 
-	public function createNewUser($username, $firstname, $lastName, $emailAddress, $password)
+	public function createNewUser($username, $firstname, $lastName, $emailAddress, $password, $file_name)
 	{
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 		$dataArray = array(
@@ -12,7 +12,8 @@ class Users extends CI_Model
 			'last_name' => $lastName,
 			'username' => $username,
 			'email_address' => $emailAddress,
-			'password' => $hashed_password
+			'password' => $hashed_password,
+			'profile_picture_location' => $file_name
 		);
 
 		if ($this->db->insert('users', $dataArray)) {
@@ -32,6 +33,14 @@ class Users extends CI_Model
 			$name = $result->row(0)->first_name . " " . $result->row(0)->last_name;
 			return $name;
 		}
+	}
+
+	public function getDetailsByUsername($username)
+	{
+		$this->db->select('username, first_name, last_name, profile_picture_location');
+		$this->db->where('username', $username);
+		$result = $this->db->get('users');
+		return $result->row_array();
 	}
 
 	public function isUsernameUnique($username)

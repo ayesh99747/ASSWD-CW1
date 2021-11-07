@@ -7,7 +7,7 @@ class Genres extends CI_Model
 	function getAllGenres()
 	{
 		$results = $this->db->get('genres');
-		return $results;
+		return $results->result_array();
 	}
 
 

@@ -10,7 +10,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
 			crossorigin="anonymous"></script>
-
+	<style>
+		.navigation-buttons{
+			margin-right:16px;
+			margin-bottom:16px;
+		}
+	</style>
 </head>
 <body>
 
@@ -27,7 +32,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 			<div class="col-md-4">
 				<div class="d-flex justify-content-end">
-					<a class="btn btn-primary" href="<?php echo base_url() ?>index.php/Authentication/logout"
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewSearchByGenre"
+					   role="button">Search Users</a>
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewProfile/<?php echo $this->session->username ?>"
+					   role="button">View Profile</a>
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/Authentication/logout"
 					   role="button">Logout</a>
 				</div>
 			</div>
@@ -41,9 +50,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 			<div class="col-md-4">
 				<div class="d-flex justify-content-end">
-					<a class="btn btn-primary" href="<?php echo base_url() ?>index.php/Authentication/loginForm"
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/Authentication/loginForm"
 					   role="button">Login</a>
-					<a class="btn btn-primary" href="<?php echo base_url() ?>index.php/Authentication/signUpForm"
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/Authentication/signUpForm"
 					   role="button">Register</a>
 				</div>
 			</div>

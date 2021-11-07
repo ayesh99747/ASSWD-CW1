@@ -19,6 +19,7 @@ class Posts extends CI_Model
 	public function getAllPostsByUsername($username)
 	{
 		$this->db->where('username', $username);
+		$this->db->order_by("timestamp", "desc");
 		$result = $this->db->get('posts');
 		return $result->result_array();
 	}

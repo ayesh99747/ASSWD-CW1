@@ -98,6 +98,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				$text = strip_tags($row['post']);
 				$textWithLinks = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank" rel="nofollow">$1</a>', $text);
 				echo $textWithLinks;
+
 				?>
 			</p>
 			<hr><br>
@@ -109,7 +110,4 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 </div>
 
-<script>
-
-</script>
 

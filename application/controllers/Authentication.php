@@ -76,40 +76,41 @@ class Authentication extends CI_Controller
 					redirect('Authentication/signUpForm');
 				} else {
 					$data = array('upload_data' => $this->upload->data());
-					$fullpath = $data['upload_data']['full_path'];
-					//$file_name = $data['upload_data']['file_name'];
+					$file_name = $data['upload_data']['file_name'];
 					$isUploadSuccess = true;
-					log_message('debug', "File Upload success - " . $fullpath);
+					log_message('debug', "File Upload success - " . $file_name);
+
+					// Inserting new user to database
+					$isRegistrationSuccess = $this->users->createNewUser($username, $firstname, $lastname, $email_address, $password, $file_name);
+					if ($isRegistrationSuccess & $isUploadSuccess) {
+						log_message('debug', "User Addition Success - " . $username);
+
+						// Adding new Genre-User Associations
+						$isGenreAdditionSuccess = false;
+						foreach ($this->input->post('genreSelection') as $genre) {
+							$this->genreuser->addGenreToUser($username, $genre);
+							log_message('debug', "Echo - " . $genre);
+							$isGenreAdditionSuccess = true;
+						}
+						if ($isGenreAdditionSuccess) {
+							log_message('debug', "Genre Addition Success - " . $username);
+							$user_data = array(
+								'username' => $username,
+								'is_logged_in' => true
+							);
+							// Setting User data in sessions.
+							$this->session->set_userdata($user_data);
+							$this->session->set_flashdata('registrationSuccessMessage', "You have successfully registered!");
+							redirect('Authentication/signUpSuccessView');
+						}
+					} else {
+						$this->session->set_flashdata('registrationFailMessage', "Sorry, your registration failed!");
+						log_message('debug', "Registration Fail - " . $username);
+						redirect('Authentication/signUpForm');
+					}
 				}
 
-				// Inserting new user to database
-				$isRegistrationSuccess = $this->users->createNewUser($username, $firstname, $lastname, $email_address, $password);
-				if ($isRegistrationSuccess & $isUploadSuccess) {
-					log_message('debug', "User Addition Success - " . $username);
 
-					// Adding new Genre-User Associations
-					$isGenreAdditionSuccess = false;
-					foreach ($this->input->post('genreSelection') as $genre) {
-						$this->genreuser->addGenreToUser($username, $genre);
-						log_message('debug', "Echo - " . $genre);
-						$isGenreAdditionSuccess = true;
-					}
-					if ($isGenreAdditionSuccess) {
-						log_message('debug', "Genre Addition Success - " . $username);
-						$user_data = array(
-							'username' => $username,
-							'is_logged_in' => true
-						);
-						// Setting User data in sessions.
-						$this->session->set_userdata($user_data);
-						$this->session->set_flashdata('registrationSuccessMessage', "You have successfully registered!");
-						redirect('Authentication/signUpSuccessView');
-					}
-				} else {
-					$this->session->set_flashdata('registrationFailMessage', "Sorry, your registration failed!");
-					log_message('debug', "Registration Fail - " . $username);
-					redirect('Authentication/signUpForm');
-				}
 			} else {
 				$this->session->set_flashdata('registrationFailMessage', "Sorry, this username already exists!");
 				log_message('debug', "Registration Failed, username exists - " . $username);
@@ -141,6 +142,10 @@ class Authentication extends CI_Controller
 				redirect('User/viewPrivateHomePage/'.$username);
 			} else {
 				log_message('debug', "Login Fail - " . $username);
+				$data = array(
+					'loginErrors' => "Username or Password does not exist."
+				);
+				$this->session->set_flashdata($data);
 				$this->session->login_error = True;
 				redirect('Authentication/loginForm');
 			}
