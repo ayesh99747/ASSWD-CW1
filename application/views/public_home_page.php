@@ -30,7 +30,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				: <?php echo $user_details['first_name']; ?> <?php echo $user_details['last_name']; ?></h2>
 			<br>
 			<h3>Stats : </h3>
-			<ul>
+			<ul><!--TODO: Make stats dynamic-->
 				<li><span class="profile-stat-count">164</span> posts</li>
 				<li><span class="profile-stat-count">188</span> followers</li>
 				<li><span class="profile-stat-count">206</span> following</li>
@@ -60,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<p class="h4">
 				<!--				--><?php //echo $row['post'] ?>
 				<?php
-
+				// TODO: Extract the images from the text.
 				$text = strip_tags($row['post']);
 				$textWithLinks = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank" rel="nofollow">$1</a>', $text);
 				echo $textWithLinks;

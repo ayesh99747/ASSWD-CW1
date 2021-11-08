@@ -44,7 +44,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <?php echo form_close(); ?>
 <br><br>
-<hr>
+
 
 <?php if (isset($user_details)): ?>
 	<?php if ($user_details === false): ?>
@@ -54,8 +54,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			</div>
 		</div>
 	<?php else: ?>
+		<hr>
 		<?php foreach ($user_details as $user_detail): ?>
-			<div class="row">
+			<div class="card-body">
 				<div class="d-flex justify-content-center">
 					<div class="col-6">
 						<img src="\cw1\assets\uploads\<?php echo $user_detail['profile_picture_location']; ?>"
@@ -66,13 +67,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<h1 class="profile-user-name">Username : @<?php echo $user_detail['username']; ?></h1>
 						<br>
 						<h2 class="profile-user-name">Name :
-							<a href="<?php echo base_url() ?>index.php/User/viewPublicHomePage/<?php echo $user_detail['username']; ?>"
-							   target="_blank"><?php echo $user_detail['first_name']; ?> <?php echo $user_detail['last_name']; ?>
+							<a href="<?php echo base_url() ?>index.php/User/viewProfile/<?php echo $user_detail['username']; ?>"><?php echo $user_detail['first_name'] . " " . $user_detail['last_name']; ?>
 						</h2></a>
 						<br>
-						<a class="btn btn-primary"
-						   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $user_detail['username']; ?>"
-						   target="_blank">Follow</a>
+						<?php if ($user_detail['isFollowed'] == true): ?>
+							<a class="btn btn-primary"
+							   href="<?php echo base_url() ?>index.php/User/unfollowUser/<?php echo $main_view; ?>/<?php echo $user_detail['username']; ?>">Unfollow</a>
+						<?php else: ?>
+							<a class="btn btn-primary"
+							   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $main_view; ?>/<?php echo $user_detail['username']; ?>">Follow</a>
+						<?php endif; ?>
+						<?php if ($user_detail['isFriend'] == true): ?>
+							<span class="badge rounded-pill bg-success">Friend</span>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>

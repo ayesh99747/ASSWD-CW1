@@ -23,15 +23,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="container-fluid">
 	<div class="row">
 		<?php if ($this->session->userdata('is_logged_in') == true): ?>
-			<div class="col-md-8">
+			<div class="col-md-4">
 				<div class="d-flex justify-content-start">
 					<a href="<?php echo base_url() ?>index.php/User/viewPrivateHomePage/<?php echo $this->session->username ?>">
 						<img src="\cw1\assets\logos\TREBLE.svg" alt="Treble Logo" width="100" height="100">
 					</a>
 				</div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-8">
 				<div class="d-flex justify-content-end">
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewFollowers/<?php echo $this->session->username ?>"
+					   role="button">View Followers</a>
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewFollowing/<?php echo $this->session->username ?>"
+					   role="button">View Following</a>
 					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewSearchByGenre"
 					   role="button">Search Users</a>
 					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewProfile/<?php echo $this->session->username ?>"
