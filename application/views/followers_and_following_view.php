@@ -37,6 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<a class="btn btn-primary"
 							   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $view_name; ?>/<?php echo $user_detail['username']; ?>">Follow</a>
 						<?php endif; ?>
+
 						<?php if ($user_detail['isFriend'] == true): ?>
 							<span class="badge rounded-pill bg-success">Friend</span>
 						<?php endif; ?>

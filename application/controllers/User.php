@@ -19,7 +19,7 @@ class User extends CI_Controller
 		if ($username === $this->session->username) {
 			$data['main_view'] = "private_home_page";
 			$usersFollowed = $this->userfollower->getFollowingByUsername($username);
-			$posts =  $this->posts->getAllPostsForUsernames($usersFollowed);
+			$posts = $this->posts->getAllPostsForUsernames($usersFollowed);
 			$data['posts'] = $posts;
 			$this->load->view('main', $data);
 		} else {
@@ -34,34 +34,25 @@ class User extends CI_Controller
 
 	public function viewPublicHomePage()
 	{
-		if (true === $this->session->is_logged_in) {
-			$username = $this->uri->segment(3);
-			$posts = $this->posts->getAllPostsByUsername($username);
-			$data['posts'] = $posts;
-			$userDetails = $this->users->getDetailsByUsername($username);
-			$data['user_details'] = $userDetails;
-			$data['main_view'] = "public_home_page";
-			$data['view_name'] = "Profile View";
-			$this->load->view('main', $data);
-		} else {
-			redirect('Authentication/loginForm');
-		}
-	}
-
-	public function viewProfile()
-	{
 		$username = trim($this->uri->segment(3));
-		if ($this->session->is_logged_in === true & $username!=$this->session->username) {
-
+		if ($this->session->is_logged_in === true) {
 			$userDetails = $this->users->getDetailsByUsername($username);
-			$userDetails['isFollowed'] = $this->userfollower->checkIsFollower($this->session->username, $username);
+			$userDetails['numberOfFollowers'] = count($this->userfollower->getFollowersByUsername($username));
+			$userDetails['numberOfFollowing'] = count($this->userfollower->getFollowingByUsername($username));
+			$userDetails['numberOfFriends'] = $this->userfollower->getNumberOfFriends($username);
+
+			if ($this->session->username != $username){
+				$userDetails['isFollowed'] = $this->userfollower->checkIsFollower($this->session->username, $username);
+				$userDetails['isFriend'] = $this->userfollower->checkIsFriend($this->session->username, $username);
+			}
 			$data['user_details'] = $userDetails;
 
 			$posts = $this->posts->getAllPostsByUsername($username);
 			$data['posts'] = $posts;
+			$data['numberOfPosts'] = count($posts);
 
-			$data['view_name'] = "Profile View";
-			$data['main_view'] = "profile_view";
+			$data['view_name'] = "Public Home Page";
+			$data['main_view'] = "public_home_page";
 			$this->load->view('main', $data);
 		} else {
 			if ($this->session->is_logged_in === true) {
@@ -124,14 +115,14 @@ class User extends CI_Controller
 		$view_name = trim($this->uri->segment(3));
 		$usernameToBeFollowed = trim($this->uri->segment(4));
 		if ($this->userfollower->followUser($this->session->username, $usernameToBeFollowed)) {
-			if ($view_name == 'searchByGenre_view'){
+			if ($view_name == 'searchByGenre_view') {
 				redirect('User/getUsersByGenre');
 			} elseif ($view_name == 'View%20Followers') {
-				redirect('User/viewFollowers/'.$this->session->username);
-			} elseif ($view_name == 'View%20Following'){
-				redirect('User/viewFollowing/'.$this->session->username);
-			} elseif ($view_name == 'Profile%20View'){
-				redirect('User/viewProfile/'.$usernameToBeFollowed);
+				redirect('User/viewFollowers/' . $this->session->username);
+			} elseif ($view_name == 'View%20Following') {
+				redirect('User/viewFollowing/' . $this->session->username);
+			} elseif ($view_name == 'Public%20Home%20Page') {
+				redirect('User/viewPublicHomePage/' . $usernameToBeFollowed);
 			}
 		} else {
 
@@ -143,14 +134,14 @@ class User extends CI_Controller
 		$view_name = trim($this->uri->segment(3));
 		$usernameToBeFollowed = trim($this->uri->segment(4));
 		if ($this->userfollower->unfollowUser($this->session->username, $usernameToBeFollowed)) {
-			if ($view_name == 'searchByGenre_view'){
+			if ($view_name == 'searchByGenre_view') {
 				redirect('User/getUsersByGenre');
 			} elseif ($view_name == 'View%20Followers') {
-				redirect('User/viewFollowers/'.$this->session->username);
-			} elseif ($view_name == 'View%20Following'){
-				redirect('User/viewFollowing/'.$this->session->username);
-			} elseif ($view_name == 'Profile%20View'){
-				redirect('User/viewProfile/'.$usernameToBeFollowed);
+				redirect('User/viewFollowers/' . $this->session->username);
+			} elseif ($view_name == 'View%20Following') {
+				redirect('User/viewFollowing/' . $this->session->username);
+			} elseif ($view_name == 'Public%20Home%20Page') {
+				redirect('User/viewPublicHomePage/' . $usernameToBeFollowed);
 			}
 		} else {
 

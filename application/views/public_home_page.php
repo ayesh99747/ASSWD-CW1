@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <div class="row">
 	<div class="d-flex justify-content-center">
-		<p class="h1">Profile View</p></div>
+		<p class="h1"> <?php echo $view_name; ?></p></div>
 </div>
 <br>
 <hr>
@@ -30,12 +30,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				: <?php echo $user_details['first_name']; ?> <?php echo $user_details['last_name']; ?></h2>
 			<br>
 			<h3>Stats : </h3>
-			<ul><!--TODO: Make stats dynamic-->
-				<li><span class="profile-stat-count">164</span> posts</li>
-				<li><span class="profile-stat-count">188</span> followers</li>
-				<li><span class="profile-stat-count">206</span> following</li>
-				<li><span class="profile-stat-count">206</span> friends</li>
+			<ul>
+				<li><span class="profile-stat-count"><?php echo $numberOfPosts; ?></span> posts</li>
+				<li><span class="profile-stat-count"><?php echo $user_details['numberOfFollowers']; ?></span> followers
+				</li>
+				<li><span class="profile-stat-count"><?php echo $user_details['numberOfFollowing']; ?></span> following
+				</li>
+				<li><span class="profile-stat-count"><?php echo $user_details['numberOfFriends']; ?></span> friends</li>
 			</ul>
+
+			<?php if (isset($user_details['isFollowed'])): ?>
+				<?php if ($user_details['isFollowed'] == true): ?>
+					<a class="btn btn-primary"
+					   href="<?php echo base_url() ?>index.php/User/unfollowUser/<?php echo $view_name; ?>/<?php echo $user_details['username']; ?>">Unfollow</a>
+				<?php else: ?>
+					<a class="btn btn-primary"
+					   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $view_name; ?>/<?php echo $user_details['username']; ?>">Follow</a>
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<?php if (isset($user_details['isFriend'])): ?>
+				<?php if ($user_details['isFriend'] == true): ?>
+					<span class="badge rounded-pill bg-success">Friend</span>
+				<?php endif; ?>
+			<?php endif; ?>
+
 		</div>
 	</div>
 

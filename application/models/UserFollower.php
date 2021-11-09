@@ -89,4 +89,20 @@ class UserFollower extends CI_Model
 		return $result->result_array();
 	}
 
+	function getNumberOfFriends($username)
+	{
+		// First we get the number of people the user follows
+		$this->db->where('follower_username', $username);
+		$results = $this->db->get('user_follower');
+		$resultArray = $results->result_array();
+
+		$numberOfFriends = 0;
+		foreach ($resultArray as $result) {
+			if ($this->checkIsFriend($result['following_username'], $username)) {
+				$numberOfFriends = $numberOfFriends + 1;
+			}
+		}
+		return $numberOfFriends;
+	}
+
 }

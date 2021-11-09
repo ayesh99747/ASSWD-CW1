@@ -38,7 +38,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					   role="button">View Following</a>
 					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewSearchByGenre"
 					   role="button">Search Users</a>
-					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewProfile/<?php echo $this->session->username ?>"
+					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/User/viewPublicHomePage/<?php echo $this->session->username ?>"
 					   role="button">View Profile</a>
 					<a class="btn btn-primary navigation-buttons" href="<?php echo base_url() ?>index.php/Authentication/logout"
 					   role="button">Logout</a>

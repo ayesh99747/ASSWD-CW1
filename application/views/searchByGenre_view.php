@@ -67,7 +67,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<h1 class="profile-user-name">Username : @<?php echo $user_detail['username']; ?></h1>
 						<br>
 						<h2 class="profile-user-name">Name :
-							<a href="<?php echo base_url() ?>index.php/User/viewProfile/<?php echo $user_detail['username']; ?>"><?php echo $user_detail['first_name'] . " " . $user_detail['last_name']; ?>
+							<a href="<?php echo base_url() ?>index.php/User/viewPublicHomePage/<?php echo $user_detail['username']; ?>"><?php echo $user_detail['first_name'] . " " . $user_detail['last_name']; ?>
 						</h2></a>
 						<br>
 						<?php if ($user_detail['isFollowed'] == true): ?>
