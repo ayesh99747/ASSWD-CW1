@@ -23,8 +23,21 @@ class Post extends CI_Controller
 			redirect('User/viewPrivateHomePage/' . $username);
 		} else {
 			$postText = $this->input->post('postText');
-
-			if ($this->posts->createNewPost($postText, $username)) {
+			$arrayString = explode(" ", $postText);
+			for ($x = 0; $x < sizeof($arrayString); $x++) {
+				if (preg_match('!https?://\S+!', $arrayString[$x], $matches)) {
+					if (preg_match('!https?://\S+.(?:jpe?g|png|gif)!', $arrayString[$x], $matches2)) {
+						$arrayString[$x] = '<img src="' . $arrayString[$x] . '" alt="' . $arrayString[$x] . '" width="150" height="100">';
+					} else {
+						$arrayString[$x] = '<a href="' . $arrayString[$x] . '" target="_blank" rel="nofollow">' . $arrayString[$x] . '</a>';
+					}
+				}
+			}
+			$newPostText = "";
+			foreach ($arrayString as $string) {
+				$newPostText = $newPostText . $string . " ";
+			}
+			if ($this->posts->createNewPost($newPostText, $username)) {
 				log_message('debug', "Post Creation Success - " . $username);
 				redirect('User/viewPrivateHomePage/' . $username);
 			} else {
@@ -34,7 +47,6 @@ class Post extends CI_Controller
 		}
 
 	}
-
 
 
 }

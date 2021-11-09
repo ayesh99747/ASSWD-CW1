@@ -92,23 +92,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<?php echo $row['username'] ?>
 			</p>
 			<p class="h4">
-				<?php
-				// TODO: Extract the images from the text.
-				$text = $row['post'];
-				$arrayString = explode(" ", $text);
-				for ($x = 0; $x < sizeof($arrayString); $x++) {
-					if (preg_match('!https?://\S+!', $arrayString[$x], $matches)) {
-						if (preg_match('!https?://\S+.(?:jpe?g|png|gif)!', $arrayString[$x], $matches2)) {
-							$arrayString[$x] = '<img src="'.$arrayString[$x].'" alt="'.$arrayString[$x].'">';
-						}else{
-							$arrayString[$x] = '<a href="'.$arrayString[$x].'" target="_blank" rel="nofollow">' . $arrayString[$x] . '</a>';
-						}
-					}
-				}
-				foreach ($arrayString as $string) {
-					echo $string . " ";
-				}
-				?>
+				<?php echo $row['post']; ?>
 			</p>
 			<hr><br>
 		<?php endforeach; ?>
