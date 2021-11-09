@@ -4,7 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class UserFollower extends CI_Model
 {
 
-	function followUser($followerUsername, $followingUsername)
+	// This function is used when a user what's to follow another user.
+	public function followUser($followerUsername, $followingUsername)
 	{
 		$dataArray = array(
 			'follower_username' => $followerUsername,
@@ -17,7 +18,8 @@ class UserFollower extends CI_Model
 		}
 	}
 
-	function unfollowUser($followerUsername, $followingUsername)
+	// This function is used when a user what's to unfollow another user.
+	public function unfollowUser($followerUsername, $followingUsername)
 	{
 		$dataArray = array(
 			'follower_username' => $followerUsername,
@@ -31,10 +33,11 @@ class UserFollower extends CI_Model
 		}
 	}
 
-	function checkIsFollower($followerUsername, $followingUsername)
+	// This function is used to check whether a particular user is following another user.
+	public function checkIsFollower($username, $followingUsername)
 	{
 		$dataArray = array(
-			'follower_username' => $followerUsername,
+			'follower_username' => $username,
 			'following_username' => $followingUsername
 		);
 		$this->db->where($dataArray);
@@ -46,18 +49,19 @@ class UserFollower extends CI_Model
 		}
 	}
 
-	function checkIsFriend($followerUsername, $followingUsername)
+	// This function is used to check whether two users are friends.
+	public function checkIsFriend($username1, $username2)
 	{
 		$dataArray1 = array(
-			'follower_username' => $followerUsername,
-			'following_username' => $followingUsername
+			'follower_username' => $username1,
+			'following_username' => $username2
 		);
 		$this->db->where($dataArray1);
 		$result1 = $this->db->get('user_follower');
 
 		$dataArray2 = array(
-			'follower_username' => $followingUsername,
-			'following_username' => $followerUsername
+			'follower_username' => $username2,
+			'following_username' => $username1
 		);
 		$this->db->where($dataArray2);
 		$result2 = $this->db->get('user_follower');
@@ -69,27 +73,30 @@ class UserFollower extends CI_Model
 		}
 	}
 
-	function getFollowersByUsername($followingUsername)
+	// This function is used to get all the followers for a particular user.
+	public function getFollowersByUsername($username)
 	{
 		$dataArray = array(
-			'following_username' => $followingUsername
+			'following_username' => $username
 		);
 		$this->db->where($dataArray);
 		$result = $this->db->get('user_follower');
 		return $result->result_array();
 	}
 
-	function getFollowingByUsername($followerUsername)
+	// This function is used to get all the users being followed by a particular user.
+	public function getFollowingByUsername($username)
 	{
 		$dataArray = array(
-			'follower_username' => $followerUsername,
+			'follower_username' => $username,
 		);
 		$this->db->where($dataArray);
 		$result = $this->db->get('user_follower');
 		return $result->result_array();
 	}
 
-	function getNumberOfFriends($username)
+	// This function is used to get the number of friends for a particular username.
+	public function getNumberOfFriends($username)
 	{
 		// First we get the number of people the user follows
 		$this->db->where('follower_username', $username);

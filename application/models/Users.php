@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Users extends CI_Model
 {
 
+	// This function is used to create a new user.
 	public function createNewUser($username, $firstname, $lastName, $emailAddress, $password, $file_name)
 	{
 		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -23,46 +24,17 @@ class Users extends CI_Model
 		}
 	}
 
-	function sendVerificationEmail($userEmail)
-	{
-		$fromEmail = 'madara.2018072@iit.ac.lk';
-		$emailSubject = 'Verify Your Email Address';
-		$emailMessage = 'Dear User,
-					<br /><br />
-					Please click on the below activation link to verify your email address.
-					<br /><br /> 
-					https://w1714881.users.ecs.westminster.ac.uk/cw1/index.php/Authentication/verifyEmail/' . md5($userEmail) . '
-					<br /><br /><br />
-					Thanks,<br />
-					Treble Team';
-
-		// Email Configuration Settings
-		$config['protocol'] = 'smtp';
-		$config['smtp_host'] = 'smtp-relay.sendinblue.com'; //smtp host name
-		$config['smtp_port'] = '587'; //smtp port number
-		$config['smtp_user'] = $fromEmail;
-		$config['smtp_pass'] = 'vtJjN3MD5CH2K18F';
-		$config['mailtype'] = 'html';
-		$config['charset'] = 'iso-8859-1';
-		$config['wordwrap'] = TRUE;
-		$config['newline'] = "\r\n";
-		$this->email->initialize($config);
-
-		$this->email->from($fromEmail, 'Treble Team');
-		$this->email->to($userEmail);
-		$this->email->subject($emailSubject);
-		$this->email->message($emailMessage);
-		return $this->email->send();
-	}
-
-
+	// The following function is used to verify the email address of a user
 	public function verifyEmailAddress($key)
 	{
 		$this->db->select('verification_status');
 		$this->db->where('md5(email_address)', $key);
-		$result = $this->db->get('users');
+		$result = $this->db->get('users'); // The rows where the md5 hash of the email address matches the key is retrieved.
+		// If the verification_status is 0, which means that if the verification has not been performed yet.
 		if ($result->first_row()->verification_status == "0") {
 			$data = array('verification_status' => 1);
+			$this->db->where('md5(email_address)', $key);
+			// The users table will be updated where the md5 hash of the email address matches the key.
 			if ($this->db->update('users', $data)) {
 				return true;
 			} else {
@@ -73,6 +45,7 @@ class Users extends CI_Model
 		}
 	}
 
+	// The following function is used to check if the email address has been verified.
 	public function isEmailAddressVerified($username)
 	{
 		$this->db->select('verification_status');
@@ -85,6 +58,7 @@ class Users extends CI_Model
 		}
 	}
 
+	// The following function is used to get the full name of a user.
 	public function getNameByUsername($username)
 	{
 		$this->db->where('username', $username);
@@ -97,6 +71,7 @@ class Users extends CI_Model
 		}
 	}
 
+	// The following function is used to get the details of a user.
 	public function getDetailsByUsername($username)
 	{
 		$this->db->select('username, first_name, last_name, profile_picture_location');
@@ -105,17 +80,8 @@ class Users extends CI_Model
 		return $result->row_array();
 	}
 
-	public function isUsernameUnique($username)
-	{
-		$this->db->where('username', $username);
-		$result = $this->db->get('users');
-		if ($result->num_rows() > 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
+	// The following function is used to check if the username and password of a user is correct.
+	// It is used during the login procedure.
 	public function authenticateUser($username, $password)
 	{
 		$result = $this->db->get_where('users', array('username' => $username));
@@ -128,15 +94,6 @@ class Users extends CI_Model
 			} else {
 				return false;
 			}
-		}
-	}
-
-	public function is_logged_in()
-	{
-		if (isset($this->session->is_logged_in) && $this->session->is_logged_in == True) {
-			return True;
-		} else {
-			return False;
 		}
 	}
 }

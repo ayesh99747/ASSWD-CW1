@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class GenreUser extends CI_Model
 {
 
+	// This function is used to create the associations between users and the genres that they select.
 	public function addGenreToUser($username, $genre)
 	{
 		$dataArray = array(
@@ -17,6 +18,7 @@ class GenreUser extends CI_Model
 		return true;
 	}
 
+	// This function is used to get all the users for a particular genre.
 	public function getUsersByGenre($genre)
 	{
 		$this->db->select('username');

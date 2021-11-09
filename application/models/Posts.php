@@ -3,6 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Posts extends CI_Model
 {
+	// This function is used when the user creates a new post.
 	public function createNewPost($post, $username)
 	{
 		$dataArray = array(
@@ -26,7 +27,8 @@ class Posts extends CI_Model
 		return $result->result_array();
 	}
 
-	// The following function is used for the users private home page where the users post and followers posts should be shown.
+	// The following function is used for the users private home page where
+	// the users post and posts pf the people the user followers should be shown.
 	public function getAllPostsForUsernames($usernames)
 	{
 		$this->db->where('username', $this->session->username);

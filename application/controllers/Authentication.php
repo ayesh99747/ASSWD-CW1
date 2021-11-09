@@ -91,7 +91,7 @@ class Authentication extends CI_Controller
 					}
 					if ($isGenreAdditionSuccess) {
 						log_message('debug', "Genre Addition Success - " . $username);
-						$sendResult = $this->users->sendVerificationEmail($email_address);
+						$sendResult = $this->sendVerificationEmail($email_address);
 						if ($sendResult) {
 							$this->session->set_flashdata('registrationSuccessMessage', "You have successfully registered!");
 							redirect('Authentication/signUpSuccessView');
@@ -110,6 +110,39 @@ class Authentication extends CI_Controller
 
 
 		}
+	}
+
+	// The following function is used to send a verification email to the user
+	public function sendVerificationEmail($userEmail)
+	{
+		$fromEmail = 'madara.2018072@iit.ac.lk';
+		$emailSubject = 'Verify Your Email Address';
+		$emailMessage = 'Dear User,
+					<br /><br />
+					Please click on the below activation link to verify your email address.
+					<br /><br /> 
+					https://w1714881.users.ecs.westminster.ac.uk/cw1/index.php/Authentication/verifyEmail/' . md5($userEmail) . '
+					<br /><br /><br />
+					Thanks,<br />
+					Treble Team';
+
+		// Email Configuration Settings
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'smtp-relay.sendinblue.com'; //smtp host name
+		$config['smtp_port'] = '587'; //smtp port number
+		$config['smtp_user'] = $fromEmail;
+		$config['smtp_pass'] = 'vtJjN3MD5CH2K18F';
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'iso-8859-1';
+		$config['wordwrap'] = TRUE;
+		$config['newline'] = "\r\n";
+		$this->email->initialize($config);
+
+		$this->email->from($fromEmail, 'Treble Team');
+		$this->email->to($userEmail);
+		$this->email->subject($emailSubject);
+		$this->email->message($emailMessage);
+		return $this->email->send();
 	}
 
 	public function verifyEmail(){
