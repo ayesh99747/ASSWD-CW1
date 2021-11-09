@@ -94,27 +94,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<p class="h4">
 				<?php
 				// TODO: Extract the images from the text.
-				$text = strip_tags($row['post']);
-				$matches = array();
-				preg_match('!https?://\S+!' , $text , $matches);
-
-				foreach ($matches as $match){
-					preg_match('!https?://\S+.(?:jpe?g|png|gif)!' , $match , $matches2);
-					if (sizeof($matches2) != 0) {
-
+				$text = $row['post'];
+				$arrayString = explode(" ", $text);
+				for ($x = 0; $x < sizeof($arrayString); $x++) {
+					if (preg_match('!https?://\S+!', $arrayString[$x], $matches)) {
+						if (preg_match('!https?://\S+.(?:jpe?g|png|gif)!', $arrayString[$x], $matches2)) {
+							$arrayString[$x] = '<img src="'.$arrayString[$x].'" alt="'.$arrayString[$x].'">';
+						}else{
+							$arrayString[$x] = '<a href="'.$arrayString[$x].'" target="_blank" rel="nofollow">' . $arrayString[$x] . '</a>';
+						}
 					}
-					var_dump($match);
-					echo "<br>";
-
-
-					echo "<br>";
 				}
-
-//				$textWithImages = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?).(?:jpe?g|png|gif)?)@', '<img src="$1" alt="$1">', $text);
-//				$textWithLinksandImages = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank" rel="nofollow">$1</a>', $textWithImages);
-//				echo $textWithLinksandImages;
-//				echo $textWithImages;
-
+				foreach ($arrayString as $string) {
+					echo $string . " ";
+				}
 				?>
 			</p>
 			<hr><br>
