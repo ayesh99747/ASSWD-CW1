@@ -37,8 +37,8 @@ class Authentication extends CI_Controller
 	{
 		$this->form_validation->set_rules('firstname', 'First Name', 'trim|required|min_length[3]');
 		$this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|min_length[3]');
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[3]');
-		$this->form_validation->set_rules('email_address', 'Email Address', 'trim|required|min_length[3]');
+		$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[3]|is_unique[users.username]');
+		$this->form_validation->set_rules('email_address', 'Email Address', 'trim|required|valid_email|min_length[3]|is_unique[users.email_address]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[3]');
 		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|min_length[3]|matches[password]');
 		if (empty($_FILES['imageUpload']['name'])) {
@@ -60,65 +60,85 @@ class Authentication extends CI_Controller
 			$email_address = $this->input->post('email_address');
 			$password = $this->input->post('password');
 
-			$isUsernameUnique = $this->users->isUsernameUnique($username);
-			if ($isUsernameUnique) {
-				// Uploading User image
-				$config['upload_path'] = './assets/uploads';
-				$config['allowed_types'] = 'gif|jpg|png';
-				$config['max_size'] = '2048';
-				$this->upload->initialize($config);
+			// Uploading User image
+			$config['upload_path'] = './assets/uploads';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$config['max_size'] = '2048';
+			$this->upload->initialize($config);
 
-				$isUploadSuccess = false;
-				if (!$this->upload->do_upload('imageUpload')) {
-					$this->session->set_flashdata('registrationFailMessage', $this->upload->display_errors());
-					log_message('debug', "Registration Failed,  unable to upload file - " . $username);
-					log_message('debug', $this->upload->display_errors());
-					redirect('Authentication/signUpForm');
-				} else {
-					$data = array('upload_data' => $this->upload->data());
-					$file_name = $data['upload_data']['file_name'];
-					$isUploadSuccess = true;
-					log_message('debug', "File Upload success - " . $file_name);
+			if (!$this->upload->do_upload('imageUpload')) {
+				$this->session->set_flashdata('registrationFailMessage', $this->upload->display_errors());
+				log_message('debug', "Registration Failed,  unable to upload file - " . $username);
+				log_message('debug', $this->upload->display_errors());
+				redirect('Authentication/signUpForm');
+			} else {
+				$data = array('upload_data' => $this->upload->data());
+				$file_name = $data['upload_data']['file_name'];
+				$isUploadSuccess = true;
+				log_message('debug', "File Upload success - " . $file_name);
 
-					// Inserting new user to database
-					$isRegistrationSuccess = $this->users->createNewUser($username, $firstname, $lastname, $email_address, $password, $file_name);
-					if ($isRegistrationSuccess & $isUploadSuccess) {
-						log_message('debug', "User Addition Success - " . $username);
+				// Inserting new user to database
+				$isRegistrationSuccess = $this->users->createNewUser($username, $firstname, $lastname, $email_address, $password, $file_name);
+				if ($isRegistrationSuccess & $isUploadSuccess) {
+					log_message('debug', "User Addition Success - " . $username);
 
-						// Adding new Genre-User Associations
-						$isGenreAdditionSuccess = false;
-						foreach ($this->input->post('genreSelection') as $genre) {
-							$this->genreuser->addGenreToUser($username, $genre);
-							log_message('debug', "Echo - " . $genre);
-							$isGenreAdditionSuccess = true;
-						}
-						if ($isGenreAdditionSuccess) {
-							log_message('debug', "Genre Addition Success - " . $username);
-							$user_data = array(
-								'username' => $username,
-								'is_logged_in' => true
-							);
-							// Setting User data in sessions.
-							$this->session->set_userdata($user_data);
+					// Adding new Genre-User Associations
+					$isGenreAdditionSuccess = false;
+					foreach ($this->input->post('genreSelection') as $genre) {
+						$this->genreuser->addGenreToUser($username, $genre);
+						log_message('debug', "Echo - " . $genre);
+						$isGenreAdditionSuccess = true;
+					}
+					if ($isGenreAdditionSuccess) {
+						log_message('debug', "Genre Addition Success - " . $username);
+						$sendResult = $this->users->sendVerificationEmail($email_address);
+						if ($sendResult) {
 							$this->session->set_flashdata('registrationSuccessMessage', "You have successfully registered!");
 							redirect('Authentication/signUpSuccessView');
+						} else {
+							log_message('debug', "Error Sending Email" . $email_address);
 						}
-					} else {
-						$this->session->set_flashdata('registrationFailMessage', "Sorry, your registration failed!");
-						log_message('debug', "Registration Fail - " . $username);
-						redirect('Authentication/signUpForm');
+
+
 					}
+				} else {
+					$this->session->set_flashdata('registrationFailMessage', "Sorry, your registration failed!");
+					log_message('debug', "Registration Fail - " . $username);
+					redirect('Authentication/signUpForm');
 				}
-
-
-			} else {
-				$this->session->set_flashdata('registrationFailMessage', "Sorry, this username already exists!");
-				log_message('debug', "Registration Failed, username exists - " . $username);
-				redirect('Authentication/signUpForm');
 			}
 
 
 		}
+	}
+
+	public function verifyEmail(){
+		$hash = $this->uri->segment(3);
+		$result = $this->users->verifyEmailAddress($hash);
+		if ($result != null){
+			if ($result){
+				$data = array(
+					'name' => 'Email Verification Success',
+					'main_view' => 'email_verification_view',
+					'isSuccess' => true
+				);
+				$this->load->view('main', $data);
+			} else {
+				$data = array(
+					'name' => 'Email Verification Success',
+					'main_view' => 'email_verification_view',
+					'isSuccess' => false
+				);
+				$this->load->view('main', $data);
+			}
+		}else {
+			$data = array(
+				'name' => 'Email Verification Completed',
+				'main_view' => 'email_verification_view',
+			);
+			$this->load->view('main', $data);
+		}
+
 	}
 
 	public function login()
@@ -135,15 +155,26 @@ class Authentication extends CI_Controller
 		} else {
 			$username = $this->input->post('username');
 			$password = $this->input->post('password');
-			if ($this->users->authenticateUser($username, $password)) {
-				$this->session->is_logged_in = true;
-				$this->session->username = $username;
-				log_message('debug', "Login Success - " . $username);
-				redirect('User/viewPrivateHomePage/'.$username);
+
+			if ($this->users->isEmailAddressVerified($username)) {
+				if ($this->users->authenticateUser($username, $password)) {
+					$this->session->is_logged_in = true;
+					$this->session->username = $username;
+					log_message('debug', "Login Success - " . $username);
+					redirect('User/viewPrivateHomePage/' . $username);
+				} else {
+					log_message('debug', "Login Fail - " . $username);
+					$data = array(
+						'loginErrors' => "Username or Password does not exist."
+					);
+					$this->session->set_flashdata($data);
+					$this->session->login_error = True;
+					redirect('Authentication/loginForm');
+				}
 			} else {
 				log_message('debug', "Login Fail - " . $username);
 				$data = array(
-					'loginErrors' => "Username or Password does not exist."
+					'loginErrors' => "Please verify your email address!"
 				);
 				$this->session->set_flashdata($data);
 				$this->session->login_error = True;

@@ -10,14 +10,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <?php if ($this->session->flashdata('registrationErrors') !== null): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('registrationErrors'); ?>
-		<?php  unset($_SESSION['registrationErrors']);?>
+		<?php unset($_SESSION['registrationErrors']); ?>
 	</div>
 <?php endif; ?>
 
 <?php if ($this->session->flashdata('registrationFailMessage') !== null): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('registrationFailMessage'); ?>
-		<?php  unset($_SESSION['registrationFailMessage']);?>
+		<?php unset($_SESSION['registrationFailMessage']); ?>
 	</div>
 <?php endif; ?>
 
@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'form-control',
 			'name' => 'firstname',
 			'placeholder' => 'Enter First name',
-
+			'value' => set_value('firstname')
 	);
 	echo form_input($data);
 	?>
@@ -54,7 +54,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'form-control',
 			'name' => 'lastname',
 			'placeholder' => 'Enter Last Name',
-
+			'value' => set_value('lastname')
 	);
 	echo form_input($data);
 	?>
@@ -68,7 +68,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'form-control',
 			'name' => 'username',
 			'placeholder' => 'Enter Username',
-
+			'value' => set_value('username')
 	);
 	echo form_input($data);
 	?>
@@ -83,7 +83,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'form-control',
 			'name' => 'email_address',
 			'placeholder' => 'Enter Email Address',
-
+			'value' => set_value('email_address')
 	);
 	echo form_input($data);
 	?>
@@ -128,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'form-control',
 			'name' => 'imageUpload',
 			'placeholder' => 'Avatar Image',
-
+			'value' => set_value('imageUpload')
 	);
 	echo form_upload($data);
 	?>

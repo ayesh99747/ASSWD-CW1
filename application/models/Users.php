@@ -23,6 +23,68 @@ class Users extends CI_Model
 		}
 	}
 
+	function sendVerificationEmail($userEmail)
+	{
+		$fromEmail = 'madara.2018072@iit.ac.lk';
+		$emailSubject = 'Verify Your Email Address';
+		$emailMessage = 'Dear User,
+					<br /><br />
+					Please click on the below activation link to verify your email address.
+					<br /><br /> 
+					https://w1714881.users.ecs.westminster.ac.uk/cw1/index.php/Authentication/verifyEmail/' . md5($userEmail) . '
+					<br /><br /><br />
+					Thanks,<br />
+					Treble Team';
+
+		// Email Configuration Settings
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'smtp-relay.sendinblue.com'; //smtp host name
+		$config['smtp_port'] = '587'; //smtp port number
+		$config['smtp_user'] = $fromEmail;
+		$config['smtp_pass'] = 'vtJjN3MD5CH2K18F';
+		$config['mailtype'] = 'html';
+		$config['charset'] = 'iso-8859-1';
+		$config['wordwrap'] = TRUE;
+		$config['newline'] = "\r\n";
+		$this->email->initialize($config);
+
+		$this->email->from($fromEmail, 'Treble Team');
+		$this->email->to($userEmail);
+		$this->email->subject($emailSubject);
+		$this->email->message($emailMessage);
+		return $this->email->send();
+	}
+
+
+	public function verifyEmailAddress($key)
+	{
+		$this->db->select('verification_status');
+		$this->db->where('md5(email_address)', $key);
+		$result = $this->db->get('users');
+		if ($result->first_row()->verification_status == "0") {
+			$data = array('verification_status' => 1);
+			if ($this->db->update('users', $data)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public function isEmailAddressVerified($username)
+	{
+		$this->db->select('verification_status');
+		$this->db->where('username', $username);
+		$result = $this->db->get('users');
+		if ($result->first_row()->verification_status == "1") {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function getNameByUsername($username)
 	{
 		$this->db->where('username', $username);

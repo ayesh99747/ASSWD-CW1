@@ -8,11 +8,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <?php if ($this->session->flashdata('registrationSuccessMessage') !== null): ?>
 	<div class="alert alert-success">
 		<?php echo $this->session->flashdata('registrationSuccessMessage'); ?>
-		<?php unset($_SESSION['registrationSuccessMessage']); ?>
 	</div>
 <?php endif; ?>
 
-<p class="h3">Welcome <?php echo $name ?> ! You can now proceed to the <a
-			href="<?php echo base_url() ?>index.php/User/viewPrivateHomePage/">home page.</a></p><br>
+<p class="h3">Welcome <?php echo $name ?> ! Please verify your email by clicking on the link our team has sent you.
+			Once your email has been successfully verified, you can proceed to the <a
+			href="<?php echo base_url() ?>index.php/Authentication/loginForm/">login page.</a></p><br>
 
 
