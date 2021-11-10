@@ -19,11 +19,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		<p class="h3"> Your email has not been successfully verified, please try again later!</p><br>
 	<?php endif; ?>
 <?php else: ?>
-	<div class="alert alert-danger">
-		<?php echo 'Email Verification already completed!'; ?>
-	</div>
-	<p class="h3"> Your email has already been verified, you can proceed to the <a
-				href="<?php echo base_url() ?>index.php/login">login page.</a></p><br>
+	<?php if ($code == 1): ?>
+		<div class="alert alert-danger">
+			<?php echo 'Email Verification already completed!'; ?>
+		</div>
+		<p class="h3"> Your email has already been verified, you can proceed to the <a
+					href="<?php echo base_url() ?>index.php/login">login page.</a></p><br>
+	<?php else: ?>
+		<div class="alert alert-danger">
+			<?php echo 'Email Verification Fail!'; ?>
+		</div>
+		<p class="h3"> The verification key provided does not exist!</p><br>
+	<?php endif; ?>
+
 <?php endif; ?>
 
 

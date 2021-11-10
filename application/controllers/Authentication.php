@@ -39,9 +39,9 @@ class Authentication extends CI_Controller
 
 	public function registrationConfirmation()
 	{
-		$this->form_validation->set_rules('firstname', 'First Name', 'trim|required|min_length[3]');
-		$this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|min_length[3]');
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[3]|is_unique[users.username]');
+		$this->form_validation->set_rules('firstname', 'First Name', 'trim|required|min_length[3]|max_length[64]');
+		$this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|min_length[3]|max_length[64]');
+		$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[3]|max_length[20]|is_unique[users.username]');
 		$this->form_validation->set_rules('email_address', 'Email Address', 'trim|required|valid_email|min_length[3]|is_unique[users.email_address]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[3]');
 		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'trim|required|min_length[3]|matches[password]');
@@ -56,7 +56,7 @@ class Authentication extends CI_Controller
 				'registrationErrors' => validation_errors()
 			);
 			$this->session->set_flashdata($data);
-			redirect('registration');
+			redirect('registration','refresh');
 		} else {
 			$firstname = $this->input->post('firstname');
 			$lastname = $this->input->post('lastname');
@@ -66,15 +66,17 @@ class Authentication extends CI_Controller
 
 			// Uploading User image
 			$config['upload_path'] = './assets/uploads';
-			$config['allowed_types'] = 'gif|jpg|png';
-			$config['max_size'] = '2048';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$config['max_size'] = 2000;
+			$config['max_width'] = 1200;
+			$config['max_height'] = 1200;
 			$this->upload->initialize($config);
 
 			if (!$this->upload->do_upload('imageUpload')) {
 				$this->session->set_flashdata('registrationFailMessage', $this->upload->display_errors());
 				log_message('debug', "Registration Failed,  unable to upload file - " . $username);
 				log_message('debug', $this->upload->display_errors());
-				redirect('registration');
+				redirect('registration','refresh');
 			} else {
 				$data = array('upload_data' => $this->upload->data());
 				$file_name = $data['upload_data']['file_name'];
@@ -146,12 +148,12 @@ class Authentication extends CI_Controller
 		return $this->email->send();
 	}
 
-	public function verifyEmail(){
+	public function verifyEmail()
+	{
 		$hash = $this->uri->segment(2);
 		$result = $this->users->verifyEmailAddress($hash);
-		if ($result != null){
-			// TODO: Completed the verification switch case.
-			switch($result){
+		if ($result != null) {
+			switch ($result) {
 				case 1:
 					$data = array(
 						'name' => 'Email Verification Success',
@@ -159,6 +161,7 @@ class Authentication extends CI_Controller
 						'isSuccess' => true
 					);
 					$this->load->view('main', $data);
+					break;
 				case 2:
 					$data = array(
 						'name' => 'Email Verification Fail',
@@ -166,26 +169,31 @@ class Authentication extends CI_Controller
 						'isSuccess' => false
 					);
 					$this->load->view('main', $data);
+					break;
 				case 3:
 					$data = array(
 						'name' => 'Email Verification Completed',
 						'main_view' => 'email_verification_view',
+						'code' => 1
 					);
 					$this->load->view('main', $data);
+					break;
 				case 4:
 					$data = array(
 						'name' => 'Key provided does not exist',
 						'main_view' => 'email_verification_view',
+						'code' => 2
 					);
 					$this->load->view('main', $data);
+					break;
 			}
 
-			if ($result){
+			if ($result) {
 
 			} else {
 
 			}
-		}else {
+		} else {
 
 		}
 
@@ -236,8 +244,8 @@ class Authentication extends CI_Controller
 
 	public function logout()
 	{
-		$array_items = array('is_logged_in' => '', 'username' => '');
-		$this->session->unset_userdata($array_items);
+		$array = array('is_logged_in', 'username');
+		$this->session->unset_userdata($array);
 		$this->session->sess_destroy();
 		redirect('home');
 	}

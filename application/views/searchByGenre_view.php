@@ -7,8 +7,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <p class="h1">Search User By Genre</p><br>
 
 <?php $attributes = array('id' => 'search_by_Genre_Form', 'class' => 'row g-3') ?>
-<?php echo form_open('User/getUsersByGenre', $attributes); ?>
+<?php echo form_open('User/getGenreSelection', $attributes); ?>
 
+<?php if (isset($selectedGenreNumber)):?>
 <!-- Drop Down Genre Input -->
 <div class="form-group">
 	<?php
@@ -22,12 +23,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'form-control',
 			'name' => 'genre_dropdown',
 			'options' => $genreArray,
+			'selected' => $selectedGenreNumber
 
 	);
 	echo form_dropdown($data);
 	?>
 </div>
+<?php else:?>
+	<!-- Drop Down Genre Input -->
+	<div class="form-group">
+		<?php
+		$genreArray = array();
+		foreach ($genres as $genre) {
+			array_push($genreArray, $genre['genre']);
+		}
 
+		echo form_label('Genre');
+		$data = array(
+				'class' => 'form-control',
+				'name' => 'genre_dropdown',
+				'options' => $genreArray,
+
+		);
+		echo form_dropdown($data);
+		?>
+	</div>
+<?php endif;?>
 <!-- Submit Button-->
 <div class="form-group">
 	<?php
@@ -72,10 +93,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						<br>
 						<?php if ($user_detail['isFollowed'] == true): ?>
 							<a class="btn btn-primary"
-							   href="<?php echo base_url() ?>index.php/User/unfollowUser/<?php echo $main_view; ?>/<?php echo $user_detail['username']; ?>">Unfollow</a>
+							   href="<?php echo base_url() ?>index.php/User/unfollowUser/<?php echo $main_view; ?>/<?php echo $user_detail['username']; ?>/<?php echo $selectedGenreNumber; ?>">Unfollow</a>
 						<?php else: ?>
 							<a class="btn btn-primary"
-							   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $main_view; ?>/<?php echo $user_detail['username']; ?>">Follow</a>
+							   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $main_view; ?>/<?php echo $user_detail['username']; ?>/<?php echo $selectedGenreNumber; ?>">Follow</a>
 						<?php endif; ?>
 						<?php if ($user_detail['isFriend'] == true): ?>
 							<span class="badge rounded-pill bg-success">Friend</span>

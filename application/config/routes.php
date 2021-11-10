@@ -61,7 +61,8 @@ $route['emailVerification/(:any)'] = 'Authentication/verifyEmail';
 // Routes for the User controller
 $route['privateHomePage/(:any)'] = 'User/viewPrivateHomePage';
 $route['publicHomePage/(:any)'] = 'User/viewPublicHomePage';
-$route['searchUsersByGenre'] = 'User/viewSearchByGenre';
+$route['viewUsersByGenre/(:any)'] = 'User/getUsersByGenre';
+$route['searchUsersByGenre'] = 'User/viewSearchByGenreForm';
 $route['followers/(:any)'] = 'User/viewFollowers';
 $route['following/(:any)'] = 'User/viewFollowing';
 

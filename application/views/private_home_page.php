@@ -13,62 +13,54 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <br>
 
 <div class="row">
-	<div class="col-2"></div>
+	<!-- Form to create a new post -->
+	<?php $attributes = array('id' => 'new_post_form', 'class' => 'row g-3') ?>
 
-	<div class="col-8">
-		<div class="d-flex justify-content-center">
-			<!-- Form to create a new post -->
-			<?php $attributes = array('id' => 'new_post_form', 'class' => 'row g-3') ?>
+	<!-- Display Post Creation Error Messages -->
+	<?php if ($this->session->flashdata('postCreationErrors')): ?>
+		<!--TODO: Fix position where error messages are shown-->
+		<div class="alert alert-danger print-error-msg form-group">
+			<?php echo $this->session->flashdata('postCreationErrors'); ?>
+			<?php unset($_SESSION['postCreationErrors']); ?>
+		</div>
+	<?php endif; ?>
+	<div class="d-flex justify-content-center">
+		<?php echo form_open('Post/createPost', $attributes); ?>
 
-			<!-- Display Post Creation Error Messages -->
-			<?php if ($this->session->flashdata('postCreationErrors')): ?>
-				<!--			TODO: Fix position where error messages are shown-->
-				<div class="alert alert-danger print-error-msg">
-					<?php echo $this->session->flashdata('postCreationErrors'); ?>
-					<?php unset($_SESSION['postCreationErrors']); ?>
-				</div>
-			<?php endif; ?>
+		<!-- Text Area Input -->
+		<div class="form-group">
+			<?php
 
-			<?php echo form_open('Post/createPost', $attributes); ?>
+			echo form_label('Post Text');
+			$data = array(
+					'class' => 'form-control',
+					'name' => 'postText',
+					'maxlength' => '10000',
+					'placeholder' => 'Enter Text',
 
-			<!-- Text Area Input -->
-			<div class="form-group">
-				<?php
-
-				echo form_label('Post Text');
-				$data = array(
-						'class' => 'form-control',
-						'name' => 'postText',
-						'maxlength' => '10000',
-						'placeholder' => 'Enter Text',
-
-				);
-				echo form_textarea($data);
-				?>
-			</div>
-
-			<!-- Submit Post Button-->
-			<div class="form-group">
-				<?php
-				$data = array(
-						'class' => 'btn btn-primary',
-						'name' => 'submit',
-						'value' => 'Submit Post',
-
-				);
-				echo form_submit($data);
-				?>
-			</div>
-
-			<?php echo form_close(); ?>
+			);
+			echo form_textarea($data);
+			?>
 		</div>
 
+		<!-- Submit Post Button-->
+		<div class="form-group">
+			<?php
+			$data = array(
+					'class' => 'btn btn-primary',
+					'name' => 'submit',
+					'value' => 'Submit Post',
+
+			);
+			echo form_submit($data);
+			?>
+		</div>
+
+		<?php echo form_close(); ?>
 	</div>
 
+</div>
 
-	<div class="col-2">
-
-	</div>
 </div>
 <br>
 
@@ -91,7 +83,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<?php echo $row['post']; ?>
 			</p><br>
 			<p class="h6 d-flex justify-content-end">
-				<!-- TODO: Align timestamp to the right.-->
 				<?php echo $row['timestamp']; ?>
 			</p>
 			<hr><br>

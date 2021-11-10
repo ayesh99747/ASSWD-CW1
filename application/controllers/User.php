@@ -36,7 +36,7 @@ class User extends CI_Controller
 			$userDetails['numberOfFollowing'] = count($this->userfollower->getFollowingByUsername($username));
 			$userDetails['numberOfFriends'] = $this->userfollower->getNumberOfFriends($username);
 
-			if ($this->session->username != $username){
+			if ($this->session->username != $username) {
 				$userDetails['isFollowed'] = $this->userfollower->checkIsFollower($this->session->username, $username);
 				$userDetails['isFriend'] = $this->userfollower->checkIsFriend($this->session->username, $username);
 			}
@@ -58,7 +58,7 @@ class User extends CI_Controller
 		}
 	}
 
-	public function viewSearchByGenre()
+	public function viewSearchByGenreForm()
 	{
 		if (true === $this->session->is_logged_in) {
 			$genres = $this->genres->getAllGenres();
@@ -70,7 +70,7 @@ class User extends CI_Controller
 		}
 	}
 
-	public function getUsersByGenre() //TODO: Try and make this a dynamic link
+	public function getGenreSelection()
 	{
 		$this->form_validation->set_rules('genre_dropdown', 'Genre', 'trim|required');
 		if ($this->form_validation->run() == FALSE) {
@@ -81,6 +81,16 @@ class User extends CI_Controller
 			redirect('searchUsersByGenre');
 		} else {
 			$selectedGenre = (int)$this->input->post('genre_dropdown');
+			redirect('viewUsersByGenre/' . $selectedGenre);
+		}
+	}
+
+	public function getUsersByGenre()
+	{
+		$selectedGenre = trim($this->uri->segment(2));
+		if ($selectedGenre == null) {
+			redirect('searchUsersByGenre');
+		} else {
 			$users = $this->genreuser->getUsersByGenre($selectedGenre + 1);
 
 			$userDetails = array();
@@ -100,6 +110,7 @@ class User extends CI_Controller
 			}
 			$genres = $this->genres->getAllGenres();
 			$data['genres'] = $genres;
+			$data['selectedGenreNumber'] = $selectedGenre;
 			$data['main_view'] = "searchByGenre_view";
 			$this->load->view('main', $data);
 		}
@@ -109,9 +120,10 @@ class User extends CI_Controller
 	{
 		$view_name = trim($this->uri->segment(3));
 		$usernameToBeFollowed = trim($this->uri->segment(4));
+		$selectedGenreNumber = trim($this->uri->segment(5));
 		if ($this->userfollower->followUser($this->session->username, $usernameToBeFollowed)) {
 			if ($view_name == 'searchByGenre_view') {
-				redirect('searchUsersByGenre');
+				redirect('viewUsersByGenre/' . $selectedGenreNumber);
 			} elseif ($view_name == 'View%20Followers') {
 				redirect('followers/' . $this->session->username);
 			} elseif ($view_name == 'View%20Following') {
@@ -128,9 +140,10 @@ class User extends CI_Controller
 	{
 		$view_name = trim($this->uri->segment(3));
 		$usernameToBeFollowed = trim($this->uri->segment(4));
+		$selectedGenreNumber = trim($this->uri->segment(5));
 		if ($this->userfollower->unfollowUser($this->session->username, $usernameToBeFollowed)) {
 			if ($view_name == 'searchByGenre_view') {
-				redirect('searchUsersByGenre');
+				redirect('viewUsersByGenre/' . $selectedGenreNumber);
 			} elseif ($view_name == 'View%20Followers') {
 				redirect('followers/' . $this->session->username);
 			} elseif ($view_name == 'View%20Following') {

@@ -139,6 +139,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<?php
 
 	echo form_label('Favourite Genre');
+	echo "<p class='text-danger'>*Please hold control when selecting more than one genre.</p>";
 
 	$options = array(
 			'1' => 'Alternative Rock',
@@ -170,7 +171,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 
 	echo form_multiselect('genreSelection[]', $options, $selected);
-//	TODO: Make it clear that they need to press ctrl to select multiple.
 	?>
 </div>
 

@@ -31,7 +31,7 @@ class Users extends CI_Model
 		$this->db->where('md5(email_address)', $key);
 		$result = $this->db->get('users'); // The rows where the md5 hash of the email address matches the key is retrieved.
 		// If the verification_status is 0, which means that if the verification has not been performed yet.
-		if ($result != null) {
+		if ($result->result_array() != null) {
 			if ($result->first_row()->verification_status == "0") {
 				$data = array('verification_status' => 1);
 				$this->db->where('md5(email_address)', $key);
