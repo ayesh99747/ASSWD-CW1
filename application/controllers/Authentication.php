@@ -6,8 +6,6 @@ class Authentication extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('users');
-		$this->load->model('genreuser');
 	}
 
 	public function index()
@@ -152,27 +150,43 @@ class Authentication extends CI_Controller
 		$hash = $this->uri->segment(2);
 		$result = $this->users->verifyEmailAddress($hash);
 		if ($result != null){
+			// TODO: Completed the verification switch case.
+			switch($result){
+				case 1:
+					$data = array(
+						'name' => 'Email Verification Success',
+						'main_view' => 'email_verification_view',
+						'isSuccess' => true
+					);
+					$this->load->view('main', $data);
+				case 2:
+					$data = array(
+						'name' => 'Email Verification Fail',
+						'main_view' => 'email_verification_view',
+						'isSuccess' => false
+					);
+					$this->load->view('main', $data);
+				case 3:
+					$data = array(
+						'name' => 'Email Verification Completed',
+						'main_view' => 'email_verification_view',
+					);
+					$this->load->view('main', $data);
+				case 4:
+					$data = array(
+						'name' => 'Key provided does not exist',
+						'main_view' => 'email_verification_view',
+					);
+					$this->load->view('main', $data);
+			}
+
 			if ($result){
-				$data = array(
-					'name' => 'Email Verification Success',
-					'main_view' => 'email_verification_view',
-					'isSuccess' => true
-				);
-				$this->load->view('main', $data);
+
 			} else {
-				$data = array(
-					'name' => 'Email Verification Success',
-					'main_view' => 'email_verification_view',
-					'isSuccess' => false
-				);
-				$this->load->view('main', $data);
+
 			}
 		}else {
-			$data = array(
-				'name' => 'Email Verification Completed',
-				'main_view' => 'email_verification_view',
-			);
-			$this->load->view('main', $data);
+
 		}
 
 	}

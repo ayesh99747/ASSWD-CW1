@@ -6,11 +6,6 @@ class User extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('posts');
-		$this->load->model('users');
-		$this->load->model('genres');
-		$this->load->model('genreuser');
-		$this->load->model('userfollower');
 	}
 
 	public function viewPrivateHomePage()
@@ -75,7 +70,7 @@ class User extends CI_Controller
 		}
 	}
 
-	public function getUsersByGenre()
+	public function getUsersByGenre() //TODO: Try and make this a dynamic link
 	{
 		$this->form_validation->set_rules('genre_dropdown', 'Genre', 'trim|required');
 		if ($this->form_validation->run() == FALSE) {
@@ -112,8 +107,8 @@ class User extends CI_Controller
 
 	public function followUser()
 	{
-		$view_name = trim($this->uri->segment(2));
-		$usernameToBeFollowed = trim($this->uri->segment(3));
+		$view_name = trim($this->uri->segment(3));
+		$usernameToBeFollowed = trim($this->uri->segment(4));
 		if ($this->userfollower->followUser($this->session->username, $usernameToBeFollowed)) {
 			if ($view_name == 'searchByGenre_view') {
 				redirect('searchUsersByGenre');
@@ -131,8 +126,8 @@ class User extends CI_Controller
 
 	public function unfollowUser()
 	{
-		$view_name = trim($this->uri->segment(2));
-		$usernameToBeFollowed = trim($this->uri->segment(3));
+		$view_name = trim($this->uri->segment(3));
+		$usernameToBeFollowed = trim($this->uri->segment(4));
 		if ($this->userfollower->unfollowUser($this->session->username, $usernameToBeFollowed)) {
 			if ($view_name == 'searchByGenre_view') {
 				redirect('searchUsersByGenre');
