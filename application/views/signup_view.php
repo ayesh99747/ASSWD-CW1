@@ -2,6 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
+<!--TODO: Style this page -->
 <title>Signup Page</title>
 <p class="h1">Registration Form</p><br>
 

@@ -79,6 +79,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<p class="h4">
 				<?php echo $row['post']; ?>
 			</p>
+			<p class="h6">
+				<?php echo $row['timestamp']; ?>
+			</p>
 			<hr><br>
 		<?php endforeach; ?>
 

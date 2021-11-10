@@ -37,6 +37,7 @@ class Posts extends CI_Model
 		}
 		$this->db->order_by("timestamp", "desc");
 		$result = $this->db->get('posts');
+
 		return $result->result_array();
 	}
 }

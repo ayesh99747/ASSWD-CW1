@@ -2,10 +2,8 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-
+<!--TODO: Style this page -->
 <title>Private Home Page</title>
-
-
 <div class="row">
 	<div class="d-flex justify-content-center">
 		<p class="h1">Private Home Page</p></div>
@@ -76,13 +74,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 	<div class="col-8">
 		<?php foreach ($posts as $row): ?>
-			<p class="h3 d-flex justify-content-start">
+			<p class="h3">
 				@<?php echo $row['username'] ?>
 			</p><br>
-			<p class="h4 d-flex justify-content-center">
+			<p class="h4">
 				<?php echo $row['post']; ?>
 			</p><br>
-			<p class="h6 d-flex justify-content-end">
+			<p class="h6">
 				<?php echo $row['timestamp']; ?>
 			</p>
 			<hr><br>

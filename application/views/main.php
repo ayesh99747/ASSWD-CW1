@@ -19,7 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </head>
 <body>
 
-
+<!--TODO: Style this page -->
 <div class="container-fluid">
 	<div class="row">
 		<?php if ($this->session->userdata('is_logged_in') == true): ?>
