@@ -50,5 +50,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'home';
+
+// Routes for the Authentication controller
+$route['login'] = 'Authentication/loginForm';
+$route['logout'] = 'Authentication/logout';
+$route['registration'] = 'Authentication/signUpForm';
+$route['signUpSuccess'] = 'Authentication/signUpSuccessView';
+$route['emailVerification/(:any)'] = 'Authentication/verifyEmail';
+
+// Routes for the User controller
+$route['privateHomePage/(:any)'] = 'User/viewPrivateHomePage';
+$route['publicHomePage/(:any)'] = 'User/viewPublicHomePage';
+$route['searchUsersByGenre'] = 'User/viewSearchByGenre';
+$route['followers/(:any)'] = 'User/viewFollowers';
+$route['following/(:any)'] = 'User/viewFollowing';
+
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

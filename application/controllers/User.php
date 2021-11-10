@@ -15,7 +15,7 @@ class User extends CI_Controller
 
 	public function viewPrivateHomePage()
 	{
-		$username = $this->uri->segment(3);
+		$username = $this->uri->segment(2);
 		if ($username === $this->session->username) {
 			$data['main_view'] = "private_home_page";
 			$usersFollowed = $this->userfollower->getFollowingByUsername($username);
@@ -24,9 +24,9 @@ class User extends CI_Controller
 			$this->load->view('main', $data);
 		} else {
 			if ($this->session->is_logged_in === true) {
-				redirect('User/viewPrivateHomePage/' . $this->session->username);
+				redirect('privateHomePage/' . $this->session->username);
 			} else {
-				redirect('Authentication/loginForm');
+				redirect('login');
 			}
 		}
 
@@ -34,7 +34,7 @@ class User extends CI_Controller
 
 	public function viewPublicHomePage()
 	{
-		$username = trim($this->uri->segment(3));
+		$username = trim($this->uri->segment(2));
 		if ($this->session->is_logged_in === true) {
 			$userDetails = $this->users->getDetailsByUsername($username);
 			$userDetails['numberOfFollowers'] = count($this->userfollower->getFollowersByUsername($username));
@@ -56,9 +56,9 @@ class User extends CI_Controller
 			$this->load->view('main', $data);
 		} else {
 			if ($this->session->is_logged_in === true) {
-				redirect('User/viewPublicHomePage/' . $this->session->username);
+				redirect('publicHomePage/' . $this->session->username);
 			} else {
-				redirect('Authentication/loginForm');
+				redirect('login');
 			}
 		}
 	}
@@ -71,7 +71,7 @@ class User extends CI_Controller
 			$data['main_view'] = "searchByGenre_view";
 			$this->load->view('main', $data);
 		} else {
-			redirect('Authentication/loginForm');
+			redirect('login');
 		}
 	}
 
@@ -83,7 +83,7 @@ class User extends CI_Controller
 				'searchByGenreErrors' => validation_errors()
 			);
 			$this->session->set_flashdata($data);
-			redirect('User/viewSearchByGenre');
+			redirect('searchUsersByGenre');
 		} else {
 			$selectedGenre = (int)$this->input->post('genre_dropdown');
 			$users = $this->genreuser->getUsersByGenre($selectedGenre + 1);
@@ -112,17 +112,17 @@ class User extends CI_Controller
 
 	public function followUser()
 	{
-		$view_name = trim($this->uri->segment(3));
-		$usernameToBeFollowed = trim($this->uri->segment(4));
+		$view_name = trim($this->uri->segment(2));
+		$usernameToBeFollowed = trim($this->uri->segment(3));
 		if ($this->userfollower->followUser($this->session->username, $usernameToBeFollowed)) {
 			if ($view_name == 'searchByGenre_view') {
-				redirect('User/getUsersByGenre');
+				redirect('searchUsersByGenre');
 			} elseif ($view_name == 'View%20Followers') {
-				redirect('User/viewFollowers/' . $this->session->username);
+				redirect('followers/' . $this->session->username);
 			} elseif ($view_name == 'View%20Following') {
-				redirect('User/viewFollowing/' . $this->session->username);
+				redirect('following/' . $this->session->username);
 			} elseif ($view_name == 'Public%20Home%20Page') {
-				redirect('User/viewPublicHomePage/' . $usernameToBeFollowed);
+				redirect('publicHomePage/' . $usernameToBeFollowed);
 			}
 		} else {
 
@@ -131,17 +131,17 @@ class User extends CI_Controller
 
 	public function unfollowUser()
 	{
-		$view_name = trim($this->uri->segment(3));
-		$usernameToBeFollowed = trim($this->uri->segment(4));
+		$view_name = trim($this->uri->segment(2));
+		$usernameToBeFollowed = trim($this->uri->segment(3));
 		if ($this->userfollower->unfollowUser($this->session->username, $usernameToBeFollowed)) {
 			if ($view_name == 'searchByGenre_view') {
-				redirect('User/getUsersByGenre');
+				redirect('searchUsersByGenre');
 			} elseif ($view_name == 'View%20Followers') {
-				redirect('User/viewFollowers/' . $this->session->username);
+				redirect('followers/' . $this->session->username);
 			} elseif ($view_name == 'View%20Following') {
-				redirect('User/viewFollowing/' . $this->session->username);
+				redirect('following/' . $this->session->username);
 			} elseif ($view_name == 'Public%20Home%20Page') {
-				redirect('User/viewPublicHomePage/' . $usernameToBeFollowed);
+				redirect('publicHomePage/' . $usernameToBeFollowed);
 			}
 		} else {
 
@@ -150,7 +150,7 @@ class User extends CI_Controller
 
 	public function viewFollowers()
 	{
-		$username = $this->uri->segment(3);
+		$username = $this->uri->segment(2);
 		if ($username === $this->session->username) {
 
 			$users = $this->userfollower->getFollowersByUsername($username);
@@ -173,16 +173,16 @@ class User extends CI_Controller
 			$this->load->view('main', $data);
 		} else {
 			if ($this->session->is_logged_in === true) {
-				redirect('User/viewPrivateHomePage/' . $this->session->username);
+				redirect('privateHomePage/' . $this->session->username);
 			} else {
-				redirect('Authentication/loginForm');
+				redirect('login');
 			}
 		}
 	}
 
 	public function viewFollowing()
 	{
-		$username = $this->uri->segment(3);
+		$username = $this->uri->segment(2);
 		if ($username === $this->session->username) {
 
 			$users = $this->userfollower->getFollowingByUsername($username);
@@ -205,9 +205,9 @@ class User extends CI_Controller
 			$this->load->view('main', $data);
 		} else {
 			if ($this->session->is_logged_in === true) {
-				redirect('User/viewPrivateHomePage/' . $this->session->username);
+				redirect('privateHomePage/' . $this->session->username);
 			} else {
-				redirect('Authentication/loginForm');
+				redirect('login');
 			}
 		}
 	}

@@ -20,7 +20,7 @@ class Post extends CI_Controller
 			);
 			$this->session->set_flashdata($data);
 			log_message('debug', "Post Creation Fail - " . $username);
-			redirect('User/viewPrivateHomePage/' . $username);
+			redirect('privateHomePage/' . $username);
 		} else {
 			$postText = $this->input->post('postText');
 			$arrayString = explode(" ", $postText);
@@ -39,10 +39,10 @@ class Post extends CI_Controller
 			}
 			if ($this->posts->createNewPost($newPostText, $username)) {
 				log_message('debug', "Post Creation Success - " . $username);
-				redirect('User/viewPrivateHomePage/' . $username);
+				redirect('privateHomePage/' . $username);
 			} else {
 				log_message('debug', "Post Creation Fail - " . $username);
-				redirect('User/viewPrivateHomePage/' . $username);
+				redirect('privateHomePage/' . $username);
 			}
 		}
 

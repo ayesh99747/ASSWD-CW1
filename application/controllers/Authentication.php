@@ -10,6 +10,12 @@ class Authentication extends CI_Controller
 		$this->load->model('genreuser');
 	}
 
+	public function index()
+	{
+		$data['main_view'] = "home_view";
+		$this->load->view('main', $data);
+	}
+
 	public function loginForm()
 	{
 		$data['main_view'] = "login_view";
@@ -52,7 +58,7 @@ class Authentication extends CI_Controller
 				'registrationErrors' => validation_errors()
 			);
 			$this->session->set_flashdata($data);
-			redirect('Authentication/signUpForm');
+			redirect('registration');
 		} else {
 			$firstname = $this->input->post('firstname');
 			$lastname = $this->input->post('lastname');
@@ -70,7 +76,7 @@ class Authentication extends CI_Controller
 				$this->session->set_flashdata('registrationFailMessage', $this->upload->display_errors());
 				log_message('debug', "Registration Failed,  unable to upload file - " . $username);
 				log_message('debug', $this->upload->display_errors());
-				redirect('Authentication/signUpForm');
+				redirect('registration');
 			} else {
 				$data = array('upload_data' => $this->upload->data());
 				$file_name = $data['upload_data']['file_name'];
@@ -93,22 +99,19 @@ class Authentication extends CI_Controller
 						log_message('debug', "Genre Addition Success - " . $username);
 						$sendResult = $this->sendVerificationEmail($email_address);
 						if ($sendResult) {
+							log_message('debug', "Email Send Success - " . $username);
 							$this->session->set_flashdata('registrationSuccessMessage', "You have successfully registered!");
-							redirect('Authentication/signUpSuccessView');
+							redirect('signUpSuccess');
 						} else {
 							log_message('debug', "Error Sending Email" . $email_address);
 						}
-
-
 					}
 				} else {
 					$this->session->set_flashdata('registrationFailMessage', "Sorry, your registration failed!");
 					log_message('debug', "Registration Fail - " . $username);
-					redirect('Authentication/signUpForm');
+					redirect('registration');
 				}
 			}
-
-
 		}
 	}
 
@@ -146,7 +149,7 @@ class Authentication extends CI_Controller
 	}
 
 	public function verifyEmail(){
-		$hash = $this->uri->segment(3);
+		$hash = $this->uri->segment(2);
 		$result = $this->users->verifyEmailAddress($hash);
 		if ($result != null){
 			if ($result){
@@ -184,7 +187,7 @@ class Authentication extends CI_Controller
 				'loginErrors' => validation_errors()
 			);
 			$this->session->set_flashdata($data);
-			redirect('Authentication/loginForm');
+			redirect('login');
 		} else {
 			$username = $this->input->post('username');
 			$password = $this->input->post('password');
@@ -194,7 +197,7 @@ class Authentication extends CI_Controller
 					$this->session->is_logged_in = true;
 					$this->session->username = $username;
 					log_message('debug', "Login Success - " . $username);
-					redirect('User/viewPrivateHomePage/' . $username);
+					redirect('privateHomePage/' . $username);
 				} else {
 					log_message('debug', "Login Fail - " . $username);
 					$data = array(
@@ -202,7 +205,7 @@ class Authentication extends CI_Controller
 					);
 					$this->session->set_flashdata($data);
 					$this->session->login_error = True;
-					redirect('Authentication/loginForm');
+					redirect('login');
 				}
 			} else {
 				log_message('debug', "Login Fail - " . $username);
@@ -211,7 +214,7 @@ class Authentication extends CI_Controller
 				);
 				$this->session->set_flashdata($data);
 				$this->session->login_error = True;
-				redirect('Authentication/loginForm');
+				redirect('login');
 			}
 		}
 
@@ -222,8 +225,6 @@ class Authentication extends CI_Controller
 		$array_items = array('is_logged_in' => '', 'username' => '');
 		$this->session->unset_userdata($array_items);
 		$this->session->sess_destroy();
-//		$this->session->is_logged_in = False;
-//		$this->session->username = '';
-		redirect('Home/index');
+		redirect('home');
 	}
 }

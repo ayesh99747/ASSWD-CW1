@@ -17,16 +17,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	<div class="col-8">
 		<div class="d-flex justify-content-center">
-			<!--			<div class="row">-->
-			<!--				-->
-			<!--			</div>-->
-
 			<!-- Form to create a new post -->
-
 			<?php $attributes = array('id' => 'new_post_form', 'class' => 'row g-3') ?>
 
-			<!-- Display Error Messages -->
+			<!-- Display Post Creation Error Messages -->
 			<?php if ($this->session->flashdata('postCreationErrors')): ?>
+				<!--			TODO: Fix position where error messages are shown-->
 				<div class="alert alert-danger print-error-msg">
 					<?php echo $this->session->flashdata('postCreationErrors'); ?>
 					<?php unset($_SESSION['postCreationErrors']); ?>
@@ -88,11 +84,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 	<div class="col-8">
 		<?php foreach ($posts as $row): ?>
-			<p class="h3">
-				<?php echo $row['username'] ?>
-			</p>
-			<p class="h4">
+			<p class="h3 d-flex justify-content-start">
+				@<?php echo $row['username'] ?>
+			</p><br>
+			<p class="h4 d-flex justify-content-center">
 				<?php echo $row['post']; ?>
+			</p><br>
+			<p class="h6 d-flex justify-content-end">
+				<!-- TODO: Align timestamp to the right.-->
+				<?php echo $row['timestamp']; ?>
 			</p>
 			<hr><br>
 		<?php endforeach; ?>
