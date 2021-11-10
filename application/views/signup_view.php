@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <!--TODO: Style this page -->
 <title>Signup Page</title>
-<p class="h1">Registration Form</p><br>
+<p class="h1 d-flex justify-content-center">Signup Page</p><br>
 
 <?php $attributes = array('id' => 'signup_form', 'class' => 'row g-3') ?>
 

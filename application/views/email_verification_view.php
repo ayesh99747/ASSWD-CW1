@@ -3,7 +3,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <title><?php echo $name ?></title>
-<p class="h1"><?php echo $name ?></p><br>
+<p class="h1 d-flex justify-content-center"><?php echo $name ?></p><br>
 
 <?php if (isset($isSuccess)): ?>
 	<?php if ($isSuccess): ?>

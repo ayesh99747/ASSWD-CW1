@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 
 <title>Search Users By Genre Page</title>
-<p class="h1">Search User By Genre</p><br>
+<p class="h1 d-flex justify-content-center">Search Users By Genre</p><br>
 
 <?php $attributes = array('id' => 'search_by_Genre_Form', 'class' => 'row g-3') ?>
-<?php echo form_open('User/getGenreSelection', $attributes); ?>
+<?php echo form_open('Genre/getGenreSelection', $attributes); ?>
 
 <?php if (isset($selectedGenreNumber)):?>
 <!-- Drop Down Genre Input -->

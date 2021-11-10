@@ -3,7 +3,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <title>Signup Success Page</title>
-<p class="h1">Registration Confirmation</p><br>
+<p class="h1 d-flex justify-content-center">Signup Success!</p><br>
 
 <?php if ($this->session->flashdata('registrationSuccessMessage') !== null): ?>
 	<div class="alert alert-success">

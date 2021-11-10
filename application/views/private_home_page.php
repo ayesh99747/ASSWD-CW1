@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <title>Private Home Page</title>
 <div class="row">
 	<div class="d-flex justify-content-center">
-		<p class="h1">Private Home Page</p></div>
+		<p class="h1 d-flex justify-content-center">Private Home Page</p><br>
 </div>
 <br>
 
