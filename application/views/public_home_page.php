@@ -18,8 +18,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<div class="col-6">
 
 				<img src="\cw1\assets\uploads\<?php echo $user_details['profile_picture_location']; ?>" alt=""
-					 width="300"
-					 height="300">
+					 width="300" height="300" class="img-thumbnail">
 
 			</div>
 
@@ -83,8 +82,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<p class="h4">
 					<?php echo $row['post']; ?>
 				</p>
-				<p class="h6">
-					<?php echo $row['timestamp']; ?>
+				<p class="h6 text-end">
+					Time : <?php echo $row['timestamp']; ?>
 				</p>
 				<hr><br>
 			<?php endforeach; ?>

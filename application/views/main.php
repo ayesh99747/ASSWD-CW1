@@ -5,15 +5,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link href="\cw1\assets\css\bootstrap.css" rel="stylesheet">
+	<link href="\cw1\assets\css\bootstrap.min.css" rel="stylesheet">
 	<script src="\cw1\assets\js\bootstrap.min.js"></script>
-	<style>
-		.navigation-buttons {
-			margin-right: 16px;
-			margin-bottom: 16px;
-			margin-top: 16px;
-		}
-	</style>
 </head>
 <body>
 
@@ -28,37 +21,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						Treble
 					</a>
 				</div>
-				<ul class="nav justify-content-end">
+				<ul class="nav nav-pills justify-content-end ">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							User Information
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li class="nav-item">
-								<a class="nav-link btn"
+								<a class="nav-link"
 								   href="<?php echo base_url() ?>index.php/followers/<?php echo $this->session->username; ?>"
-								   role="button">View Followers</a>
+								   >View Followers</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link btn"
+								<a class="nav-link"
 								   href="<?php echo base_url() ?>index.php/following/<?php echo $this->session->username; ?>"
-								   role="button">View Following</a>
+								   >View Following</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link btn"
+								<a class="nav-link "
 								   href="<?php echo base_url() ?>index.php/publicHomePage/<?php echo $this->session->username; ?>"
-								   role="button">View Profile</a>
+								   >View Profile</a>
 							</li>
 						</ul>
 					</li>
-
 					<li class="nav-item">
-						<a class="nav-link btn" href="<?php echo base_url() ?>index.php/searchUsersByGenre"
-						   role="button">Search Users</a>
+						<a class="nav-link" href="<?php echo base_url() ?>index.php/searchUsersByGenre">Search Users</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link btn" href="<?php echo base_url() ?>index.php/logout"
-						   role="button">Logout</a>
+						<a class="nav-link" href="<?php echo base_url() ?>index.php/logout">Logout</a>
 					</li>
 				</ul>
 			</nav>
@@ -70,14 +60,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 						Treble
 					</a>
 				</div>
-				<ul class="nav justify-content-end">
+				<ul class="nav nav-pills justify-content-end">
 					<li class="nav-item">
-						<a class="nav-link btn" href="<?php echo base_url() ?>index.php/login"
-						   role="button">Login</a>
+						<a class="nav-link" href="<?php echo base_url() ?>index.php/login"
+						   >Login</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link btn" href="<?php echo base_url() ?>index.php/registration"
-						   role="button">Register</a>
+						<a class="nav-link" href="<?php echo base_url() ?>index.php/registration">Register</a>
 					</li>
 				</ul>
 			</nav>

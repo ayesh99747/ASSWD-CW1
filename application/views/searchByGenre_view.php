@@ -81,8 +81,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<div class="d-flex justify-content-center">
 					<div class="col-6">
 						<img src="\cw1\assets\uploads\<?php echo $user_detail['profile_picture_location']; ?>"
-							 width="300"
-							 height="300" alt="">
+							 width="300" height="300" alt="" class="img-thumbnail">
 					</div>
 					<div class="col-6">
 						<h1 class="profile-user-name">Username : @<?php echo $user_detail['username']; ?></h1>

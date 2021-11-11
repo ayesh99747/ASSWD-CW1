@@ -61,7 +61,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 </div>
 <br>
-
+<hr>
 <div class="row">
 	<div class="d-flex justify-content-center">
 		<p class="h1">Latest Posts</p></div>
@@ -80,8 +80,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			<p class="h4">
 				<?php echo $row['post']; ?>
 			</p><br>
-			<p class="h6">
-				<?php echo $row['timestamp']; ?>
+			<p class="h6 text-end">
+				Time posted : <?php echo $row['timestamp']; ?>
 			</p>
 			<hr><br>
 		<?php endforeach; ?>
