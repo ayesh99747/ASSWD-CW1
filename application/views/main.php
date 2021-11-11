@@ -25,7 +25,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				<ul class="nav nav-pills justify-content-end ">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							User Information
+							User
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li class="nav-item">
@@ -53,10 +53,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								   href="<?php echo base_url() ?>index.php/updateUserInfo"
 								>Update Details</a>
 							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="<?php echo base_url() ?>index.php/searchUsersByGenre">Search Users</a>
+							</li>
 						</ul>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="<?php echo base_url() ?>index.php/searchUsersByGenre">Search Users</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="<?php echo base_url() ?>index.php/logout">Logout</a>
