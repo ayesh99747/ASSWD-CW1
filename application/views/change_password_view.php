@@ -2,12 +2,12 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<!--TODO: Style this page -->
 <title>Change Password Page</title>
 <p class="h1 d-flex justify-content-center">Change Password Page</p><br>
 
 <?php $attributes = array('id' => 'change_password_form', 'class' => 'row g-3') ?>
 
+<!--The following danger message will be displayed if there are errors.-->
 <?php if ($this->session->flashdata('changePasswordErrors') !== null): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('changePasswordErrors'); ?>
@@ -16,7 +16,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <?php endif; ?>
 
 
-
+<!--Change Password Form-->
 <?php echo form_open('Authentication/changePassword', $attributes); ?>
 
 <!-- Old Password Input -->

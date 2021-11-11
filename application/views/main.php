@@ -13,6 +13,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="container-fluid">
 	<div class="row">
 		<?php if ($this->session->userdata('is_logged_in') == true): ?>
+			<!--If the user is logged in, this navbar will be shown-->
 			<nav class="navbar navbar-light bg-light">
 				<div class="container">
 					<a class="navbar-brand"
@@ -63,6 +64,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				</ul>
 			</nav>
 		<?php else: ?>
+			<!--If the user is not logged in, this navbar will be shown-->
 			<nav class="navbar navbar-light bg-light">
 				<div class="container">
 					<a class="navbar-brand" href="<?php echo base_url() ?>index.php/Home">

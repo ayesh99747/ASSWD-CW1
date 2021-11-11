@@ -19,7 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<div class="col-4">
 		<br><br>
 		<p class="text-center display-2">
-			Treble is the social network for music lovers!
+			Treble is the best social network for music lovers!
 		</p>
 	</div>
 </div>

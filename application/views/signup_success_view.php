@@ -5,6 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <title>Signup Success Page</title>
 <p class="h1 d-flex justify-content-center">Signup Success!</p><br>
 
+<!--Signup success messages will be shown here-->
 <?php if ($this->session->flashdata('registrationSuccessMessage') !== null): ?>
 	<div class="alert alert-success">
 		<?php echo $this->session->flashdata('registrationSuccessMessage'); ?>

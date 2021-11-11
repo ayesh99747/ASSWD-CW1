@@ -37,15 +37,17 @@ class Genre extends CI_Controller
 		}
 	}
 
+	// The following function is used to get all the users by Genre
 	public function getUsersByGenre()
 	{
-		$selectedGenre = trim($this->uri->segment(2));
+		$selectedGenre = trim($this->uri->segment(2)); // Get the genre number
 		if ($selectedGenre == null) {
 			redirect('searchUsersByGenre');
 		} else {
-			$users = $this->genreuser->getUsersByGenre($selectedGenre + 1);
+			$users = $this->genreuser->getUsersByGenre($selectedGenre + 1); // Get the usernames by genre
 
 			$userDetails = array();
+			// For each user we append e isfollowed and isfriend data.
 			foreach ($users as $user) {
 				if ($user['username'] != $this->session->username) {
 					$userDetail = $this->users->getDetailsByUsername($user['username']);
@@ -57,13 +59,15 @@ class Genre extends CI_Controller
 
 			if (count($userDetails) > 0) {
 				$data['user_details'] = $userDetails;
+				log_message('debug', "Get Users by Genre Success - " . $selectedGenre);
 			} else {
 				$data['user_details'] = false;
+				log_message('debug', "Get Users by Genre Empty - " . $selectedGenre);
 			}
-			$genres = $this->genres->getAllGenres();
+			$genres = $this->genres->getAllGenres(); // Here we get all the genres available
 			$data['genres'] = $genres;
 			$data['selectedGenreNumber'] = $selectedGenre;
-			$data['main_view'] = "searchByGenre_view";
+			$data['main_view'] = "searchByGenre_view"; // We render the search by genre view
 			$this->load->view('main', $data);
 		}
 	}

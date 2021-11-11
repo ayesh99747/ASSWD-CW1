@@ -8,6 +8,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <?php if (isset($user_details)): ?>
 	<?php if ($user_details === false): ?>
+		<!--If there were no users found-->
 		<div class="row">
 			<div class="d-flex justify-content-center">
 				<h2>No users were found!</h2>
@@ -15,10 +16,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 		</div>
 	<?php else: ?>
 		<hr>
+		<!--If there were users found-->
 		<?php foreach ($user_details as $user_detail): ?>
 			<div class="card-body">
 				<div class="d-flex justify-content-center">
 					<div class="col-6">
+						<!--Rendering profile picture-->
 						<img src="\cw1\assets\uploads\<?php echo $user_detail['profile_picture_location']; ?>"
 							 width="300" height="300" alt="" class="img-thumbnail">
 					</div>
@@ -29,6 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<a href="<?php echo base_url() ?>index.php/publicHomePage/<?php echo $user_detail['username']; ?>"><?php echo $user_detail['first_name'] . " " . $user_detail['last_name']; ?>
 						</h2></a>
 						<br>
+						<!--Buttons to follow or unfollow a user-->
 						<?php if ($user_detail['isFollowed'] == true): ?>
 							<a class="btn btn-primary"
 							   href="<?php echo base_url() ?>index.php/User/unfollowUser/<?php echo $view_name; ?>/<?php echo $user_detail['username']; ?>">Unfollow</a>
@@ -36,7 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 							<a class="btn btn-primary"
 							   href="<?php echo base_url() ?>index.php/User/followUser/<?php echo $view_name; ?>/<?php echo $user_detail['username']; ?>">Follow</a>
 						<?php endif; ?>
-
+						<!--If the user is a friend-->
 						<?php if ($user_detail['isFriend'] == true): ?>
 							<span class="badge rounded-pill bg-success">Friend</span>
 						<?php endif; ?>

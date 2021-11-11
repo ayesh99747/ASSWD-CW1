@@ -2,7 +2,6 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<!--TODO: Style this page -->
 <title>Private Home Page</title>
 <div class="row">
 	<div class="d-flex justify-content-center">
@@ -16,7 +15,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 	<!-- Display Post Creation Error Messages -->
 	<?php if ($this->session->flashdata('postCreationErrors')): ?>
-		<!--TODO: Fix position where error messages are shown-->
 		<div class="alert alert-danger print-error-msg form-group">
 			<?php echo $this->session->flashdata('postCreationErrors'); ?>
 			<?php unset($_SESSION['postCreationErrors']); ?>
@@ -72,6 +70,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	<div class="col-2">
 
 	</div>
+	<!--All the posts will be displayed here-->
 	<div class="col-8">
 		<?php foreach ($posts as $row): ?>
 			<p class="h3">

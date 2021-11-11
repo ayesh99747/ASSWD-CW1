@@ -2,23 +2,17 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<!--TODO: Style this page -->
 <title>Login Page</title>
 <p class="h1 d-flex justify-content-center">Login Page</p><br>
 
+<!--Start of the login form-->
 <?php $attributes = array('id' => 'login_form', 'class' => 'row g-3') ?>
 
+<!--If there are login errors, this error message will be shown-->
 <?php if ($this->session->flashdata('loginErrors')): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('loginErrors'); ?>
 		<?php  unset($_SESSION['loginErrors']);?>
-	</div>
-<?php endif; ?>
-
-<?php if ($this->session->flashdata('changePasswordSuccess') !== null): ?>
-	<div class="alert alert-success">
-		<?php echo $this->session->flashdata('changePasswordSuccess'); ?>
-		<?php unset($_SESSION['changePasswordSuccess']); ?>
 	</div>
 <?php endif; ?>
 

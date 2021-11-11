@@ -8,12 +8,15 @@ class User extends CI_Controller
 		parent::__construct();
 	}
 
+	// This function is used to render the private home page.
 	public function viewPrivateHomePage()
 	{
 		$username = $this->uri->segment(2);
 		if ($username === $this->session->username) {
 			$data['main_view'] = "private_home_page";
+			// We retrieve all the users followed by the user.
 			$usersFollowed = $this->userfollower->getFollowingByUsername($username);
+			// We retrieve all the posts for a user
 			$posts = $this->posts->getAllPostsForUsernames($usersFollowed);
 			$data['posts'] = $posts;
 			$this->load->view('main', $data);
@@ -27,10 +30,12 @@ class User extends CI_Controller
 
 	}
 
+	// This function is used to render the public home page.
 	public function viewPublicHomePage()
 	{
 		$username = trim($this->uri->segment(2));
 		if ($this->session->is_logged_in === true) {
+			// Here we retrieve all the details by username
 			$userDetails = $this->users->getDetailsByUsername($username);
 			$userDetails['numberOfFollowers'] = count($this->userfollower->getFollowersByUsername($username));
 			$userDetails['numberOfFollowing'] = count($this->userfollower->getFollowingByUsername($username));
@@ -42,7 +47,7 @@ class User extends CI_Controller
 			}
 			$data['user_details'] = $userDetails;
 
-			$posts = $this->posts->getAllPostsByUsername($username);
+			$posts = $this->posts->getAllPostsByUsername($username); // We get all the posts by the user.
 			$data['posts'] = $posts;
 			$data['numberOfPosts'] = count($posts);
 
@@ -58,12 +63,15 @@ class User extends CI_Controller
 		}
 	}
 
+	// This function is used when the follow button is clicked by a user.
 	public function followUser()
 	{
 		$view_name = trim($this->uri->segment(3));
 		$usernameToBeFollowed = trim($this->uri->segment(4));
 		$selectedGenreNumber = trim($this->uri->segment(5));
 		if ($this->userfollower->followUser($this->session->username, $usernameToBeFollowed)) {
+			// Once the follow operation is successful the user will be redirected to the page he came from.
+			log_message('debug', "Follow User Success - " . $usernameToBeFollowed);
 			if ($view_name == 'searchByGenre_view') {
 				redirect('viewUsersByGenre/' . $selectedGenreNumber);
 			} elseif ($view_name == 'View%20Followers') {
@@ -74,16 +82,21 @@ class User extends CI_Controller
 				redirect('publicHomePage/' . $usernameToBeFollowed);
 			}
 		} else {
-
+			// If the follow operation fails, he will be redirected to his private home page.
+			log_message('debug', "Follow User Fail - " . $usernameToBeFollowed);
+			redirect('privateHomePage/' . $this->session->username);
 		}
 	}
 
+	// This function is used when the unfollow button is clicked by a user.
 	public function unfollowUser()
 	{
 		$view_name = trim($this->uri->segment(3));
 		$usernameToBeFollowed = trim($this->uri->segment(4));
 		$selectedGenreNumber = trim($this->uri->segment(5));
 		if ($this->userfollower->unfollowUser($this->session->username, $usernameToBeFollowed)) {
+			log_message('debug', "Unfollow User Success - " . $usernameToBeFollowed);
+			// Once the unfollow operation is successful the user will be redirected to the page he came from.
 			if ($view_name == 'searchByGenre_view') {
 				redirect('viewUsersByGenre/' . $selectedGenreNumber);
 			} elseif ($view_name == 'View%20Followers') {
@@ -94,15 +107,18 @@ class User extends CI_Controller
 				redirect('publicHomePage/' . $usernameToBeFollowed);
 			}
 		} else {
-
+			// If the unfollow operation fails, he will be redirected to his private home page.
+			log_message('debug', "Unfollow User Fail - " . $usernameToBeFollowed);
+			redirect('privateHomePage/' . $this->session->username);
 		}
 	}
 
+	// This function is used when the user wants to view all his followers
 	public function viewFollowers()
 	{
 		$username = $this->uri->segment(2);
 		if ($username === $this->session->username) {
-
+			// We retrieve the followers by the username here.
 			$users = $this->userfollower->getFollowersByUsername($username);
 			$userDetails = array();
 			foreach ($users as $user) {
@@ -130,11 +146,12 @@ class User extends CI_Controller
 		}
 	}
 
+	// This function is used when the user wants to view all the users he follows
 	public function viewFollowing()
 	{
 		$username = $this->uri->segment(2);
 		if ($username === $this->session->username) {
-
+			// We retrieve all the users he follows by the username here.
 			$users = $this->userfollower->getFollowingByUsername($username);
 			$userDetails = array();
 			foreach ($users as $user) {

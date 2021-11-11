@@ -2,12 +2,11 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<!--TODO: Style this page -->
 <title>Signup Page</title>
 <p class="h1 d-flex justify-content-center">Signup Page</p><br>
 
 <?php $attributes = array('id' => 'signup_form', 'class' => 'row g-3') ?>
-
+<!--Any registration errors would be shown here-->
 <?php if ($this->session->flashdata('registrationErrors') !== null): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('registrationErrors'); ?>
@@ -15,6 +14,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 <?php endif; ?>
 
+<!--If the registration fails a message would be shown here-->
 <?php if ($this->session->flashdata('registrationFailMessage') !== null): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('registrationFailMessage'); ?>
@@ -22,6 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 <?php endif; ?>
 
+<!--If the user is already loggedin this would be shown-->
 <?php if ($this->session->userdata('is_logged_in') == true): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo "You have already logged in!"; ?>
@@ -195,7 +196,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 				'class' => 'btn btn-primary',
 				'name' => 'submit',
 				'value' => 'Signup',
-
 		);
 		echo form_submit($data);
 		?>

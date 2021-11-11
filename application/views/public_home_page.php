@@ -42,6 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					</li>
 				</ul>
 
+				<!--Follow or Unfollow button will be displayed here-->
 				<?php if (isset($user_details['isFollowed'])): ?>
 					<?php if ($user_details['isFollowed'] == true): ?>
 						<a class="btn btn-primary"
@@ -52,6 +53,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 					<?php endif; ?>
 				<?php endif; ?>
 
+				<!--The isfriend pill will be shown here-->
 				<?php if (isset($user_details['isFriend'])): ?>
 					<?php if ($user_details['isFriend'] == true): ?>
 						<span class="badge rounded-pill bg-success">Friend</span>

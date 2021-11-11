@@ -69,12 +69,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <?php if (isset($user_details)): ?>
 	<?php if ($user_details === false): ?>
+		<!--If no users were found in the search by genre operation-->
 		<div class="row">
 			<div class="d-flex justify-content-center">
 				<h2>No users were found!</h2>
 			</div>
 		</div>
 	<?php else: ?>
+		<!--All the users' details will be shown here-->
 		<hr>
 		<?php foreach ($user_details as $user_detail): ?>
 			<div class="card-body">

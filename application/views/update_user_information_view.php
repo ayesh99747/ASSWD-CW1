@@ -2,12 +2,12 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<!--TODO: Style this page -->
 <title>Update User Details Page</title>
 <p class="h1 d-flex justify-content-center">Update User Details Page</p><br>
 
 <?php $attributes = array('id' => 'update_user_information_form', 'class' => 'row g-3') ?>
 
+<!--If there are errors with the form this will be shown-->
 <?php if ($this->session->flashdata('updateErrors') !== null): ?>
 	<div class="alert alert-danger print-error-msg">
 		<?php echo $this->session->flashdata('updateErrors'); ?>
@@ -15,6 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 <?php endif; ?>
 
+<!--If the update was successful this would be shown-->
 <?php if ($this->session->flashdata('updateSuccessMessage') !== null): ?>
 	<div class="alert alert-success">
 		<?php echo $this->session->flashdata('updateSuccessMessage'); ?>
@@ -116,7 +117,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 			'class' => 'btn btn-primary',
 			'name' => 'submit',
 			'value' => 'Change Details',
-
 	);
 	echo form_submit($data);
 	?>

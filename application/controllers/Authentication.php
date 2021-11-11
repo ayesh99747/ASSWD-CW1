@@ -107,7 +107,11 @@ class Authentication extends CI_Controller
 							redirect('signUpSuccess');
 						} else {
 							// If the email was not sent successfully.
-							log_message('debug', "Error Sending Email" . $emailAddress);
+							log_message('debug', "Error Sending Email - " . $username);
+							$this->session->set_flashdata('registrationSuccessMessage', "Unable to send verification email, but registration successful!");
+							// By passing the email verification as it does not work on the westminster server.
+							$this->users->verifyEmailAddress(md5($emailAddress));
+							redirect('signUpSuccess');
 						}
 					}
 				} else {
@@ -129,7 +133,7 @@ class Authentication extends CI_Controller
 					<br /><br />
 					Please click on the below activation link to verify your email address.
 					<br /><br /> 
-					https://w1714881.users.ecs.westminster.ac.uk/cw1/index.php/Authentication/verifyEmail/' . md5($userEmail) . '
+					https://w1714881.users.ecs.westminster.ac.uk/cw1/index.php/emailVerification/' . md5($userEmail) . '
 					<br /><br /><br />
 					Thanks,<br />
 					Treble Team';
@@ -163,6 +167,7 @@ class Authentication extends CI_Controller
 			switch ($result) {
 				case 1:
 					// If the email verification was successful.
+					log_message('debug', "Email Verification Success - " . $emailHash);
 					$data = array(
 						'name' => 'Email Verification Success',
 						'main_view' => 'email_verification_view',
@@ -172,6 +177,7 @@ class Authentication extends CI_Controller
 					break;
 				case 2:
 					// If the email verification was unsuccessful.
+					log_message('debug', "Email Verification Fail - " . $emailHash);
 					$data = array(
 						'name' => 'Email Verification Fail',
 						'main_view' => 'email_verification_view',
@@ -181,6 +187,7 @@ class Authentication extends CI_Controller
 					break;
 				case 3:
 					// If the email verification has already been performed.
+					log_message('debug', "Email Verification Already Completed - " . $emailHash);
 					$data = array(
 						'name' => 'Email Verification Completed',
 						'main_view' => 'email_verification_view',
@@ -190,6 +197,7 @@ class Authentication extends CI_Controller
 					break;
 				case 4:
 					// If the email provided does not exist.
+					log_message('debug', "Email Does not exist - " . $emailHash);
 					$data = array(
 						'name' => 'Key provided does not exist',
 						'main_view' => 'email_verification_view',
@@ -200,6 +208,7 @@ class Authentication extends CI_Controller
 			}
 		} else {
 			// If the email verification has been unsuccessful for any other reason.
+			log_message('debug', "Email Verification Fail - " . $emailHash);
 			$data = array(
 				'name' => 'Email Verification Fail',
 				'main_view' => 'email_verification_view',
@@ -260,6 +269,7 @@ class Authentication extends CI_Controller
 
 	}
 
+	// The following function is used to view the change password form.
 	public function changePasswordForm()
 	{
 		if ($this->session->is_logged_in == true) {
@@ -270,6 +280,7 @@ class Authentication extends CI_Controller
 		}
 	}
 
+	// The following function is used to process the data related to the change password form
 	public function changePassword()
 	{
 		// The following code validates the form fields.
@@ -289,7 +300,9 @@ class Authentication extends CI_Controller
 			$newPassword = $this->input->post('newPassword');
 			$username = $this->session->username;
 
+			// First we check if the user exists.
 			if ($this->users->authenticateUser($username, $existingPassword)) {
+				// If the user exists we update the password.
 				if ($this->users->changePassword($username, $newPassword)) {
 					log_message('debug', "Change Password Success - " . $username);
 					$this->logout();
@@ -304,6 +317,7 @@ class Authentication extends CI_Controller
 					redirect('changePassword');
 				}
 			} else {
+				// If the user doesn't exist this error will be displayed.
 				log_message('debug', "Change Password Failed - " . $username);
 				$data = array(
 					'changePasswordErrors' => "Username and old Password does not match!"
@@ -315,6 +329,7 @@ class Authentication extends CI_Controller
 		}
 	}
 
+	// This function is used to display the update user information form.
 	public function updateUserInformationForm()
 	{
 		if ($this->session->is_logged_in == true) {
@@ -330,6 +345,7 @@ class Authentication extends CI_Controller
 		}
 	}
 
+	// This function is used to update the user information
 	public function updateUserInformation()
 	{
 		// Setting the form validations for the signup form.
@@ -352,15 +368,19 @@ class Authentication extends CI_Controller
 			$username = $this->session->username;
 			$emailAddress = $this->input->post('email_address');
 
-			if ($this->users->updateUserDetails($username,$firstname, $lastname,$emailAddress)) {
+			// Here we will be updating the user details.
+			if ($this->users->updateUserDetails($username, $firstname, $lastname, $emailAddress)) {
+				log_message('debug', "User Details update Success - " . $username);
 				$sendResult = $this->sendVerificationEmail($emailAddress); // Sending verification email to user.
 				if ($sendResult) {
-					log_message('debug', "Email Address Change Success - " . $username);
+					log_message('debug', "Email Send Success - " . $username);
 				} else {
-					log_message('debug', "Verification Email Send Fail - " . $username);
+					log_message('debug', "Email Send Fail - " . $username);
+					$this->users->verifyEmailAddress(md5($emailAddress));
 				}
 			}
 
+			// Here we will be updating the genres that the user has selected.
 			if ($this->input->post('genreSelection') != null) {
 				if ($this->genreuser->deleteGenresByUser($username)) {
 					foreach ($this->input->post('genreSelection') as $genre) {
@@ -370,18 +390,18 @@ class Authentication extends CI_Controller
 					log_message('debug', "Genre Update Successful - " . $genre);
 				}
 			}
+			// If the user details update was successful
 			$data = array(
 				'updateSuccessMessage' => "Update was Successful!"
 			);
 			$this->session->set_flashdata($data);
-			redirect('updateUserInfo', 'refresh');
+			redirect('updateUserInfo');
 		}
 	}
 
 
 // The following function is used when the user logs out.
-	public
-	function logout()
+	public function logout()
 	{
 		$array = array('is_logged_in', 'username');
 		$this->session->unset_userdata($array);
