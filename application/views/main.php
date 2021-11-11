@@ -42,6 +42,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 								   href="<?php echo base_url() ?>index.php/publicHomePage/<?php echo $this->session->username; ?>"
 								   >View Profile</a>
 							</li>
+							<li class="nav-item">
+								<a class="nav-link "
+								   href="<?php echo base_url() ?>index.php/changePassword"
+								>Change Password</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link "
+								   href="<?php echo base_url() ?>index.php/updateUserInfo"
+								>Update Details</a>
+							</li>
 						</ul>
 					</li>
 					<li class="nav-item">

@@ -15,9 +15,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 	</div>
 <?php endif; ?>
 
-<?php if ($this->session->userdata('is_logged_in') == true): ?>
-	<div class="alert alert-danger print-error-msg">
-		<?php echo "You have already logged in!"; ?>
+<?php if ($this->session->flashdata('changePasswordSuccess') !== null): ?>
+	<div class="alert alert-success">
+		<?php echo $this->session->flashdata('changePasswordSuccess'); ?>
+		<?php unset($_SESSION['changePasswordSuccess']); ?>
 	</div>
 <?php endif; ?>
 

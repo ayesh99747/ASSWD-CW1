@@ -79,7 +79,7 @@ class Users extends CI_Model
 	// The following function is used to get the details of a user.
 	public function getDetailsByUsername($username)
 	{
-		$this->db->select('username, first_name, last_name, profile_picture_location');
+		$this->db->select('username, first_name, last_name, email_address, profile_picture_location');
 		$this->db->where('username', $username);
 		$result = $this->db->get('users');
 		return $result->row_array();
@@ -101,4 +101,27 @@ class Users extends CI_Model
 			}
 		}
 	}
+
+	public function changePassword($username, $newPassword)
+	{
+		$hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
+		$data = array(
+			'password' => $hashed_password,
+		);
+		$this->db->where('username', $username);
+		return $this->db->update('users', $data);
+	}
+
+	public function updateUserDetails($username, $firstname, $lastName, $emailAddress)
+	{
+		$dataArray = array(
+			'first_name' => $firstname,
+			'last_name' => $lastName,
+			'username' => $username,
+			'email_address' => $emailAddress,
+		);
+		$this->db->where('username', $username);
+		return $this->db->update('users', $dataArray);
+	}
+
 }

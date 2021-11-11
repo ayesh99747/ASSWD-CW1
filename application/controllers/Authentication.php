@@ -94,7 +94,7 @@ class Authentication extends CI_Controller
 					$isGenreAdditionSuccess = false;
 					foreach ($this->input->post('genreSelection') as $genre) {
 						$this->genreuser->addGenreToUser($username, $genre);
-						log_message('debug', "Echo - " . $genre);
+						log_message('debug', "Genre Added - " . $genre);
 						$isGenreAdditionSuccess = true;
 					}
 					if ($isGenreAdditionSuccess) {
@@ -260,8 +260,128 @@ class Authentication extends CI_Controller
 
 	}
 
-	// The following function is used when the user logs out.
-	public function logout()
+	public function changePasswordForm()
+	{
+		if ($this->session->is_logged_in == true) {
+			$data = array(
+				'main_view' => 'change_password_view'
+			);
+			$this->load->view('main', $data);
+		}
+	}
+
+	public function changePassword()
+	{
+		// The following code validates the form fields.
+		$this->form_validation->set_rules('existingPassword', 'Old Password', 'trim|required|min_length[3]');
+		$this->form_validation->set_rules('newPassword', 'New Password', 'trim|required|min_length[3]');
+		$this->form_validation->set_rules('confirmNewPassword', 'Confirm New Password', 'trim|required|min_length[3]|matches[newPassword]');
+
+		if ($this->form_validation->run() == FALSE) {
+			$data = array(
+				'changePasswordErrors' => validation_errors()
+			);
+			$this->session->set_flashdata($data);
+			redirect('changePassword');
+		} else {
+			// Retrieving the post data from the form.
+			$existingPassword = $this->input->post('existingPassword');
+			$newPassword = $this->input->post('newPassword');
+			$username = $this->session->username;
+
+			if ($this->users->authenticateUser($username, $existingPassword)) {
+				if ($this->users->changePassword($username, $newPassword)) {
+					log_message('debug', "Change Password Success - " . $username);
+					$this->logout();
+					redirect('login');
+				} else {
+					log_message('debug', "Change Password Failed - " . $username);
+					$data = array(
+						'changePasswordErrors' => "Error while updating password!"
+					);
+					$this->session->set_flashdata($data);
+					$this->session->login_error = True;
+					redirect('changePassword');
+				}
+			} else {
+				log_message('debug', "Change Password Failed - " . $username);
+				$data = array(
+					'changePasswordErrors' => "Username and old Password does not match!"
+				);
+				$this->session->set_flashdata($data);
+				$this->session->login_error = True;
+				redirect('changePassword');
+			}
+		}
+	}
+
+	public function updateUserInformationForm()
+	{
+		if ($this->session->is_logged_in == true) {
+			$details = $this->users->getDetailsByUsername($this->session->username);
+			$genreArray = $this->genreuser->getGenresByUser($this->session->username);
+			$data = array(
+				'main_view' => 'update_user_information_view',
+				'details' => $details,
+				'genres' => $genreArray
+
+			);
+			$this->load->view('main', $data);
+		}
+	}
+
+	public function updateUserInformation()
+	{
+		// Setting the form validations for the signup form.
+		$this->form_validation->set_rules('firstname', 'First Name', 'trim|required|min_length[3]|max_length[64]');
+		$this->form_validation->set_rules('lastname', 'Last Name', 'trim|required|min_length[3]|max_length[64]');
+		$this->form_validation->set_rules('email_address', 'Email Address', 'trim|required|valid_email|min_length[3]');
+		$this->form_validation->set_rules('genreSelection[]', 'Favourite Genre', 'trim');
+
+		// Checking if the form_validation couldn't run and outputing the errors
+		if ($this->form_validation->run() == FALSE) {
+			$data = array(
+				'updateErrors' => validation_errors()
+			);
+			$this->session->set_flashdata($data);
+			redirect('updateUserInfo', 'refresh');
+		} else {
+			// Retrieving all the data from the post and assigning them to variables.
+			$firstname = $this->input->post('firstname');
+			$lastname = $this->input->post('lastname');
+			$username = $this->session->username;
+			$emailAddress = $this->input->post('email_address');
+
+			if ($this->users->updateUserDetails($username,$firstname, $lastname,$emailAddress)) {
+				$sendResult = $this->sendVerificationEmail($emailAddress); // Sending verification email to user.
+				if ($sendResult) {
+					log_message('debug', "Email Address Change Success - " . $username);
+				} else {
+					log_message('debug', "Verification Email Send Fail - " . $username);
+				}
+			}
+
+			if ($this->input->post('genreSelection') != null) {
+				if ($this->genreuser->deleteGenresByUser($username)) {
+					foreach ($this->input->post('genreSelection') as $genre) {
+						$this->genreuser->addGenreToUser($username, $genre);
+
+					}
+					log_message('debug', "Genre Update Successful - " . $genre);
+				}
+			}
+			$data = array(
+				'updateSuccessMessage' => "Update was Successful!"
+			);
+			$this->session->set_flashdata($data);
+			redirect('updateUserInfo', 'refresh');
+		}
+	}
+
+
+// The following function is used when the user logs out.
+	public
+	function logout()
 	{
 		$array = array('is_logged_in', 'username');
 		$this->session->unset_userdata($array);

@@ -11,11 +11,15 @@ class GenreUser extends CI_Model
 			'username' => $username,
 			'genre_id' => $genre
 		);
-		log_message('debug', 'Username - ' . $username);
-		log_message('debug', 'Genre - ' . $genre);
 		$this->db->insert('genre_user', $dataArray);
 
 		return true;
+	}
+
+	public function deleteGenresByUser($username)
+	{
+		$this->db->where('username', $username);
+		return $this->db->delete('genre_user');
 	}
 
 	// This function is used to get all the users for a particular genre.
@@ -25,6 +29,19 @@ class GenreUser extends CI_Model
 		$this->db->where('genre_id',$genre);
 		$result = $this->db->get('genre_user');
 		return $result->result_array();
+	}
+
+
+	public function getGenresByUser($username)
+	{
+		$this->db->select('genre_id');
+		$this->db->where('username',$username);
+		$result = $this->db->get('genre_user');
+		$genreArray = Array();
+		foreach ($result->result_array() as $row){
+			array_push($genreArray,$row['genre_id']);
+		}
+		return $genreArray;
 	}
 
 

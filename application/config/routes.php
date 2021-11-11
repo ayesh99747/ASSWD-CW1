@@ -57,7 +57,9 @@ $route['translate_uri_dashes'] = FALSE;
 $route['login'] = 'Authentication/loginForm';
 $route['logout'] = 'Authentication/logout';
 $route['registration'] = 'Authentication/signUpForm';
-$route['signUpSuccess'] = 'Authentication/signUpSuccessView';
+$route['registration'] = 'Authentication/signUpForm';
+$route['changePassword'] = 'Authentication/changePasswordForm';
+$route['updateUserInfo'] = 'Authentication/updateUserInformationForm';
 $route['emailVerification/(:any)'] = 'Authentication/verifyEmail';
 
 // Routes for the User controller
