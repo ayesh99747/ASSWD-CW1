@@ -5,16 +5,16 @@ class Users extends CI_Model
 {
 
 	// This function is used to create a new user.
-	public function createNewUser($username, $firstname, $lastName, $emailAddress, $password, $file_name)
+	public function createNewUser($username, $firstname, $lastName, $emailAddress, $password, $fileName)
 	{
-		$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+		$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 		$dataArray = array(
 			'first_name' => $firstname,
 			'last_name' => $lastName,
 			'username' => $username,
 			'email_address' => $emailAddress,
-			'password' => $hashed_password,
-			'profile_picture_location' => $file_name
+			'password' => $hashedPassword,
+			'profile_picture_location' => $fileName
 		);
 
 		if ($this->db->insert('users', $dataArray)) {
@@ -104,9 +104,9 @@ class Users extends CI_Model
 
 	public function changePassword($username, $newPassword)
 	{
-		$hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
+		$hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 		$data = array(
-			'password' => $hashed_password,
+			'password' => $hashedPassword,
 		);
 		$this->db->where('username', $username);
 		return $this->db->update('users', $data);
